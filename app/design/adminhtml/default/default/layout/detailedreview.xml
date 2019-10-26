@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout>
+    <detailedreviewadmin_adminhtml_statistics_index>
+        <reference name="content">
+            <block type="detailedreview/adminhtml_statistics" name="statistics" />
+        </reference>
+    </detailedreviewadmin_adminhtml_statistics_index>
+    <adminhtml_catalog_category_edit>
+        <reference name="head">
+            <action method="addJs"><script>detailedreview/adminhtml.js</script></action>
+        </reference>
+    </adminhtml_catalog_category_edit>
+    <default>
+        <reference name="head">
+            <action method="addJs"><script>detailedreview/dr.full.min.js</script></action>
+        </reference>
+    </default>
+</layout>

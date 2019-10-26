@@ -1,0 +1,641 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <onestepcheckout_index_index translate="label">
+        <update handle="MAP_popup"/>
+        <label>Magegiant One Step Checkout</label>
+        <remove name="left"/>
+        <remove name="right"/>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="addJs">
+                <script>magegiant/onestepcheckout/onestepcheckout.min.js</script>
+            </action>
+            <action method="addJs">
+                <script>magegiant/tinybox2/tinybox.js</script>
+            </action>
+            <action method="addJs">
+                <script>mage/centinel.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/magegiant/onestepcheckout/css/style.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/magegiant/onestepcheckout/css/grid-magegiant.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/magegiant/onestepcheckout/css/tinybox2/style.css</name>
+            </action>
+            <!--Jquery-->
+          <!--  <action method="addJs">
+                <script>magegiant/onestepcheckout/jquery/jquery-1.11.1.min.js</script>
+            </action>
+            <action method="addJs">
+                <script>magegiant/onestepcheckout/jquery/jquery.noconflict.js</script>
+            </action> -->
+            <!--JqueryCarousel-->
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/magegiant/onestepcheckout/owl.carousel.js</name>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/magegiant/onestepcheckout/css/owl.carousel.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/magegiant/onestepcheckout/css/owl.transitions.css</stylesheet>
+            </action>
+            <!--Awesome Font-->
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/magegiant/onestepcheckout/css/font-awesome/css/font-awesome.css</name>
+                <params/>
+            </action>
+            <!-- Calendar -->
+            <action method="addItem">
+                <type>js_css</type>
+                <name>calendar/calendar-win2k-1.css</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>calendar/calendar.js</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>calendar/calendar-setup.js</name>
+            </action>
+            <!--Design Configuration-->
+            <block type="core/text" name="onestepcheckout.custom.css">
+                <action method="setText">
+                    <text helper="onestepcheckout/generator_css/getDesignFile"/>
+                </action>
+            </block>
+            <!--Google address api-->
+            <block type="core/text" name="onestepcheckout.googlemap">
+                <action method="setText">
+                    <text>
+                        <!--<![CDATA[<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>]]>-->
+                    </text>
+                </action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="onestepcheckout/container" name="onestepcheckout.container">
+                <action method="setTemplate">
+                    <template helper="onestepcheckout/config/getLayoutTemplate"/>
+                </action>
+                <!--Custom Block-->
+                <block type="onestepcheckout/customblock_page_onestepcheckout" name="one.step.checkout.custom.top"
+                       as="custom.top" template="magegiant/onestepcheckout/customblock/onestepcheckout/top.phtml">
+                    <block type="onestepcheckout/customblock_page_onestepcheckout_top" name="one.step.checkout.custom.top.block"
+                           as="custom.top.block" template="magegiant/onestepcheckout/customblock/onestepcheckout/top/block.phtml"
+                            />
+                </block>
+                <block type="onestepcheckout/customblock_page_onestepcheckout" name="one.step.checkout.custom.bottom"
+                       as="custom.bottom" template="magegiant/onestepcheckout/customblock/onestepcheckout/bottom.phtml">
+                    <block type="onestepcheckout/customblock_page_onestepcheckout_bottom" name="one.step.checkout.custom.bottom.block"
+                           as="custom.bottom.block" template="magegiant/onestepcheckout/customblock/onestepcheckout/bottom/block.phtml"
+                            />
+                </block>
+                <!--/Custom Block-->
+                <block type="onestepcheckout/container_login_form" name="one.step.checkout.container.login"
+                       as="form.login" template="magegiant/onestepcheckout/container/login.phtml">
+                    <block type="onestepcheckout/container_login_popup" name="one.step.checkout.container.login.popup"
+                           as="form.login.popup" template="magegiant/onestepcheckout/container/login/popup.phtml">
+                        <block type="core/text_list" name="form.captcha.login">
+                            <block type="captcha/captcha" name="captcha.login">
+                                <reference name="head">
+                                    <action method="addJs">
+                                        <file>mage/captcha.js</file>
+                                    </action>
+                                </reference>
+                                <action method="setFormId">
+                                    <formId>user_login</formId>
+                                </action>
+                                <action method="setImgWidth">
+                                    <width>230</width>
+                                </action>
+                                <action method="setImgHeight">
+                                    <width>50</width>
+                                </action>
+                            </block>
+                        </block>
+                        <block type="core/text_list" name="form.captcha.forgot">
+                            <block type="captcha/captcha" name="captcha.forgot">
+                                <reference name="head">
+                                    <action method="addJs">
+                                        <file>mage/captcha.js</file>
+                                    </action>
+                                </reference>
+                                <action method="setFormId">
+                                    <formId>user_forgotpassword</formId>
+                                </action>
+                                <action method="setImgWidth">
+                                    <width>230</width>
+                                </action>
+                                <action method="setImgHeight">
+                                    <width>50</width>
+                                </action>
+                            </block>
+                        </block>
+                    </block>
+                </block>
+                <block type="onestepcheckout/container_form_address" name="one.step.checkout.container.form.address"
+                       as="address" template="magegiant/onestepcheckout/container/form/address.phtml">
+                    <action method="setTemplate">
+                        <template helper="onestepcheckout/address/getAddressTemplate"/>
+                    </action>
+                    <block type="onestepcheckout/container_form_address_billing" name="one.step.checkout.container.form.address.billing"
+                           as="billing.address">
+                        <action method="setTemplate">
+                            <template helper="onestepcheckout/address/getBillingTemplate"/>
+                        </action>
+                        <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/onestep/userattributes.phtml" name="customer_form_customer_user_defined_attributes">
+                            <action method="setFormCode">
+                                <code>checkout_register</code>
+                            </action>
+                        </block>
+                        <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/onestep/userattributes.phtml" name="customer_form_billing_address_user_defined_attributes">
+                            <action method="setFormCode">
+                                <code>customer_register_address</code>
+                            </action>
+                        </block>
+                        <block type="core/text_list" name="one.step.checkout.container.form.address.billing.extra" as="extra"/>
+                    </block>
+                    <block type="onestepcheckout/container_form_address_shipping" name="one.step.checkout.container.form.address.shipping"
+                           as="shipping.address">
+                        <action method="setTemplate">
+                            <template helper="onestepcheckout/address/getShippingTemplate"/>
+                        </action>
+                        <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_shipping_address_user_defined_attributes">
+                            <action method="setFormCode">
+                                <code>customer_register_address</code>
+                            </action>
+                        </block>
+                        <block type="core/text_list" name="one.step.checkout.container.form.address.shipping.extra" as="extra"
+                                />
+                    </block>
+                    <block type="core/text_list" name="one.step.checkout.container.form.address.extra" as="address.extra"/>
+                </block>
+                <block type="onestepcheckout/container_form_shipping" name="one.step.checkout.container.form.shipping.method"
+                       as="shipping.method"
+                        >
+                    <action method="setTemplate">
+                        <template helper="onestepcheckout/shipping/getShippingMethodTemplate"/>
+                    </action>
+                    <block type="onestepcheckout/container_form_shipping_available" name="one.step.checkout.container.form.shipping.method.available" as="available"
+                           template="magegiant/onestepcheckout/container/form/shipping/available.phtml"
+
+                            />
+                    <block type="core/text_list" name="one.step.checkout.container.form.shipping.method.extra" as="extra"
+                            />
+                </block>
+                <block type="onestepcheckout/container_form_payment" name="one.step.checkout.container.form.payment"
+                       as="payment.method" template="magegiant/onestepcheckout/container/form/payment.phtml">
+                    <block type="onestepcheckout/container_form_payment_methods" name="one.step.checkout.container.form.payment.method"
+                           as="methods" template="magegiant/onestepcheckout/container/form/payment/methods.phtml"/>
+                    <block type="core/text_list" name="one.step.checkout.container.form.payment.method.extra" as="extra"/>
+                </block>
+                <block type="onestepcheckout/container_form_review" name="one.step.checkout.container.form.review" as="order.review"
+                       template="magegiant/onestepcheckout/container/form/review.phtml">
+                    <block type="onestepcheckout/container_form_review_items" name="one.step.checkout.container.form.review.items"
+                           as="review.items" template="magegiant/onestepcheckout/container/form/review/items.phtml">
+                        <action method="addItemRender">
+                            <type>default</type>
+                            <block>checkout/cart_item_renderer</block>
+                            <template>magegiant/onestepcheckout/container/form/review/items/renderer/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>grouped</type>
+                            <block>checkout/cart_item_renderer_grouped</block>
+                            <template>magegiant/onestepcheckout/container/form/review/items/renderer/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>configurable</type>
+                            <block>checkout/cart_item_renderer_configurable</block>
+                            <template>magegiant/onestepcheckout/container/form/review/items/renderer/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>bundle</type>
+                            <block>bundle/checkout_cart_item_renderer</block>
+                            <template>magegiant/onestepcheckout/container/form/review/items/renderer/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>downloadable</type>
+                            <block>downloadable/checkout_cart_item_renderer</block>
+                            <template>magegiant/onestepcheckout/container/form/review/items/renderer/downloadable.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>giftcard</type>
+                            <block>enterprise_giftcard/checkout_cart_item_renderer</block>
+                            <template>magegiant/onestepcheckout/container/form/review/items/renderer/item.phtml</template>
+                        </action>
+                        <block type="checkout/cart_totals" name="checkout.onepage.review.info.totals"
+                               as="totals" template="magegiant/onestepcheckout/container/form/review/totals.phtml"/>
+                    </block>
+
+                    <!--Enterprise-->
+                    <block type="onestepcheckout/compatible_enterprise_review_giftcard" name="one.step.checkout.container.form.review.enterprise.giftcard"
+                           as="review.enterprise.giftcard" template="magegiant/onestepcheckout/compatible/enterprise/review/giftcard.phtml"/>
+                    <block type="onestepcheckout/compatible_enterprise_review_storecredit" name="one.step.checkout.container.form.review.enterprise.storecredit"
+                           as="review.enterprise.storecredit" template="magegiant/onestepcheckout/compatible/enterprise/review/storecredit.phtml"/>
+                    <block type="onestepcheckout/compatible_enterprise_review_points" name="one.step.checkout.container.form.review.enterprise.points"
+                           as="review.enterprise.points" template="magegiant/onestepcheckout/compatible/enterprise/review/points.phtml"/>
+                    <block type="onestepcheckout/container_form_review_newsletter" name="one.step.checkout.container.form.review.newsletter"
+                           as="review.newsletter" template="magegiant/onestepcheckout/container/form/review/newsletter.phtml"/>
+                    <!--Coupon-->
+                    <block type="onestepcheckout/container_form_review_coupon" name="one.step.checkout.container.form.review.coupon"
+                           as="review.coupon" template="magegiant/onestepcheckout/container/form/review/coupon.phtml"/>
+                    <block type="onestepcheckout/container_form_review_comment" name="one.step.checkout.container.form.review.comment"
+                           as="review.comment" template="magegiant/onestepcheckout/container/form/review/comment.phtml"/>
+                    <!--Delivery time-->
+                    <block type="onestepcheckout/container_form_review_delivery" name="one.step.checkout.container.form.review.delivery"
+                           as="review.delivery" template="magegiant/onestepcheckout/container/form/review/delivery.phtml"/>
+                    <!--Survey-->
+                    <block type="onestepcheckout/container_form_review_survey" name="one.step.checkout.container.form.review.survey"
+                           as="review.survey" template="magegiant/onestepcheckout/container/form/review/survey.phtml"/>
+                    <!--Gift Wrap-->
+                    <block type="onestepcheckout/container_form_review_giftwrap" name="one.step.checkout.container.form.review.giftwrap"
+                           as="review.giftwrap" template="magegiant/onestepcheckout/container/form/review/giftwrap.phtml"/>
+                    <!--Gift Message-->
+                    <block type="onestepcheckout/container_form_review_giftmessage" name="one.step.checkout.container.form.review.giftmessage"
+                           as="review.giftmessage" template="magegiant/onestepcheckout/container/form/review/giftmessage.phtml"/>
+                    <!--Terms and Conditions-->
+                    <block type="onestepcheckout/container_form_review_term" name="one.step.checkout.container.form.review.term"
+                           as="review.term" template="magegiant/onestepcheckout/container/form/review/term.phtml"/>
+                    <!--Place Order Button-->
+                    <block type="onestepcheckout/container_form_review_placeorder" name="one.step.checkout.container.form.review.place.order"
+                           as="review.place.order" template="magegiant/onestepcheckout/container/form/review/placeorder.phtml"/>
+                    <!--Extra content-->
+                    <block type="core/text_list" name="one.step.checkout.container.form.review.extra" as="review.extra"/>
+                </block>
+                <block type="cms/block" name="magegiant-osc-1column-top">
+                    <action method="setBlockId">
+                        <block_id>magegiant-osc-1column-top</block_id>
+                    </action>
+                </block>
+
+                <block type="cms/block" name="magegiant-osc-1column-middle">
+                    <action method="setBlockId">
+                        <block_id>magegiant-osc-1column-middle</block_id>
+                    </action>
+                </block>
+                <block type="cms/block" name="magegiant-osc-1column-bottom">
+                    <action method="setBlockId">
+                        <block_id>magegiant-osc-1column-bottom</block_id>
+                    </action>
+                </block>
+                <block type="onestepcheckout/container_product_list_related" name="one.step.checkout.container.product.list.related"
+                       as="related" template="magegiant/onestepcheckout/container/product/list/related.phtml">
+                    <block type="onestepcheckout/container_product_list_related_crosssell" name="one.step.checkout.container.related.crosssell"
+                           as="crosssell" template="magegiant/onestepcheckout/container/product/list/related/crosssell.phtml"/>
+                </block>
+            </block>
+        </reference>
+        <update handle="onestepcheckout_attributes_form_template_handle"/>
+    </onestepcheckout_index_index>
+    <!--Adding Custome Static block-->
+    <onestepcheckout_index_index>
+        <!--Add Block below Fields-->
+        <reference name="one.step.checkout.container.form.address.billing.extra">
+            <block type="cms/block" name="onestepcheckout.billing.address.below">
+                <action method="setBlockId">
+                    <block_id helper="onestepcheckout/config/getBlockBelowBillingAddress"/>
+                </action>
+            </block>
+        </reference>
+        <reference name="one.step.checkout.container.form.address.shipping.extra">
+            <block type="cms/block" name="onestepcheckout.shipping.address.below">
+                <action method="setBlockId">
+                    <block_id helper="onestepcheckout/config/getBlockBelowShippingAddress"/>
+                </action>
+            </block>
+        </reference>
+        <reference name="one.step.checkout.container.form.shipping.method.extra">
+            <block type="cms/block" name="onestepcheckout.shipping.method.below">
+                <action method="setBlockId">
+                    <block_id helper="onestepcheckout/config/getBlockBelowShippingMethod"/>
+                </action>
+            </block>
+        </reference>
+        <reference name="one.step.checkout.container.form.payment.method.extra">
+            <block type="cms/block" name="onestepcheckout.payment.method.below">
+                <action method="setBlockId">
+                    <block_id helper="onestepcheckout/config/getBlockBelowPaymentMethod"/>
+                </action>
+            </block>
+        </reference>
+        <!--/Add Block below Fields-->
+    </onestepcheckout_index_index>
+
+    <!--PCA Address-->
+    <onestepcheckout_index_index>
+        <reference name="head">
+            <!--PCA Address-->
+            <action method="addJs">
+                <script>magegiant/onestepcheckout/pca/address-3.40.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/magegiant/onestepcheckout/css/pca/address-3.40.min.css</name>
+            </action>
+        </reference>
+        <reference name="one.step.checkout.container.form.address.extra">
+            <block type="onestepcheckout/container_form_address_pca_script" name="one.step.checkout.container.form.address.pca" template="magegiant/onestepcheckout/container/form/address/pca/script.phtml"/>
+        </reference>
+    </onestepcheckout_index_index>
+    <!--/PCA Address-->
+    <onestepcheckout_abandonedcart_quote_item>
+        <block type="sales/order_email_items" name="items" template="magegiant/onestepcheckout/abandonedcart/quote/items.phtml">
+        </block>
+    </onestepcheckout_abandonedcart_quote_item>
+    <checkout_onepage_success translate="label">
+        <reference name="content">
+            <block type="onestepcheckout/customblock_page_checkoutsuccess" name="customblock.onestepcheckout.success.top"
+                   template="magegiant/onestepcheckout/customblock/onestepcheckout/success/top.phtml" before="-"/>
+            <block type="onestepcheckout/customblock_page_checkoutsuccess" name="customblock.onestepcheckout.success.bottom"
+                   template="magegiant/onestepcheckout/customblock/onestepcheckout/success/bottom.phtml" after="-"/>
+        </reference>
+    </checkout_onepage_success>
+    <checkout_multishipping_success translate="label">
+        <reference name="content">
+            <block type="onestepcheckout/customblock_shoppingcart" name="customblock.onestepcheckout.success.top"
+                   template="magegiant/onestepcheckout/customblock/onestepcheckout/success/top.phtml" before="-"/>
+            <block type="onestepcheckout/customblock_shoppingcart" name="customblock.onestepcheckout.success.bottom"
+                   template="magegiant/onestepcheckout/customblock/onestepcheckout/success/bottom.phtml" after="-"/>
+        </reference>
+    </checkout_multishipping_success>
+    <!-- Order View -->
+    <sales_order_view>
+        <reference name="order_items">
+            <action method="setTemplate">
+                <template>magegiant/onestepcheckout/order/view.phtml</template>
+            </action>
+        </reference>
+        <reference name="order_totals">
+            <block type="onestepcheckout/totals_order_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_order_view>
+    <sales_order_print>
+        <reference name="sales.order.print">
+            <action method="setTemplate">
+                <template>magegiant/onestepcheckout/order/print.phtml</template>
+            </action>
+        </reference>
+        <reference name="order_totals">
+            <block type="onestepcheckout/totals_order_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_order_print>
+    <sales_email_order_items>
+        <reference name="items">
+            <action method="setTemplate">
+                <template>magegiant/onestepcheckout/order/email.phtml</template>
+            </action>
+        </reference>
+        <reference name="order_totals">
+            <block type="onestepcheckout/totals_order_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_email_order_items>
+    <sales_order_invoice>
+        <reference name="invoice_totals">
+            <block type="onestepcheckout/totals_invoice_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_order_invoice>
+    <sales_order_printinvoice>
+        <reference name="invoice_totals">
+            <block type="onestepcheckout/totals_invoice_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_order_printinvoice>
+    <sales_email_order_invoice_items>
+        <reference name="invoice_totals">
+            <block type="onestepcheckout/totals_invoice_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_email_order_invoice_items>
+
+    <sales_order_creditmemo>
+        <reference name="creditmemo_totals">
+            <block type="onestepcheckout/totals_creditmemo_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_order_creditmemo>
+    <sales_order_printcreditmemo>
+        <reference name="creditmemo_totals">
+            <block type="onestepcheckout/totals_creditmemo_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_order_printcreditmemo>
+    <sales_email_order_creditmemo_items>
+        <reference name="creditmemo_totals">
+            <block type="onestepcheckout/totals_creditmemo_giftwrap" name="giant.giftwrap"/>
+        </reference>
+    </sales_email_order_creditmemo_items>
+    <!--Customer Attribute-->
+    <onestepcheckout_attributes_form_template_handle>
+        <reference name="content">
+            <block name="customer_form_template" type="onestepcheckout/form_template">
+                <action method="addRenderer">
+                    <type>text</type>
+                    <renderer_block>onestepcheckout/form_renderer_text</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/text.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>textarea</type>
+                    <renderer_block>onestepcheckout/form_renderer_textarea</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/textarea.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>multiline</type>
+                    <renderer_block>onestepcheckout/form_renderer_multiline</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/multiline.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>date</type>
+                    <renderer_block>onestepcheckout/form_renderer_date</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/date.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>select</type>
+                    <renderer_block>onestepcheckout/form_renderer_select</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/select.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>multiselect</type>
+                    <renderer_block>onestepcheckout/form_renderer_multiselect</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/multiselect.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>boolean</type>
+                    <renderer_block>onestepcheckout/form_renderer_boolean</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/boolean.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>file</type>
+                    <renderer_block>onestepcheckout/form_renderer_file</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/file.phtml</template>
+                </action>
+                <action method="addRenderer">
+                    <type>image</type>
+                    <renderer_block>onestepcheckout/form_renderer_image</renderer_block>
+                    <template>magegiant/onestepcheckout/customer/form/renderer/image.phtml</template>
+                </action>
+            </block>
+        </reference>
+    </onestepcheckout_attributes_form_template_handle>
+
+    <!--Acount Edit Form-->
+    <customer_account_edit translate="label">
+        <reference name="my.account.wrapper">
+            <block type="customer/form_edit" name="customer_edit" template="customer/form/edit.phtml">
+                <action ifconfig="onestepcheckout/general/is_enabled" method="setTemplate">
+                    <template>magegiant/onestepcheckout/customer/form/edit.phtml</template>
+                </action>
+                <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_user_attributes">
+                    <action method="setFormCode">
+                        <code>customer_account_edit</code>
+                    </action>
+                </block>
+            </block>
+        </reference>
+        <update handle="onestepcheckout_attributes_form_template_handle"/>
+    </customer_account_edit>
+    <!--Address Form-->
+    <customer_address_form translate="label">
+        <reference name="my.account.wrapper">
+            <block type="customer/address_edit" name="customer_address_edit" template="customer/address/edit.phtml">
+                <action ifconfig="onestepcheckout/general/is_enabled" method="setTemplate">
+                    <template>magegiant/onestepcheckout/customer/address/edit.phtml</template>
+                </action>
+                <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_user_attributes">
+                    <action method="setFormCode">
+                        <code>customer_address_edit</code>
+                    </action>
+                </block>
+            </block>
+        </reference>
+        <update handle="onestepcheckout_attributes_form_template_handle"/>
+    </customer_address_form>
+    <!--Account Create-->
+    <customer_account_create translate="label">
+        <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_user_attributes">
+            <action method="setFormCode">
+                <code>customer_account_create</code>
+            </action>
+            <action method="setEntityModelClass">
+                <code>customer/customer</code>
+            </action>
+        </block>
+        <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_address_user_attributes">
+            <action method="setFormCode">
+                <code>customer_register_address</code>
+            </action>
+            <action method="setEntityModelClass">
+                <code>customer/address</code>
+            </action>
+        </block>
+        <reference name="customer_form_register">
+            <action ifconfig="onestepcheckout/general/is_enabled" method="setTemplate">
+                <template>magegiant/onestepcheckout/customer/form/register.phtml</template>
+            </action>
+            <action method="append">
+                <block>customer.form.register.fields.before</block>
+                <alias>form_fields_before</alias>
+            </action>
+            <action method="append">
+                <block>customer_form_user_attributes</block>
+            </action>
+            <action method="append">
+                <block>customer_form_address_user_attributes</block>
+            </action>
+            <block type="core/text_list" name="form.additional.info">
+                <block type="captcha/captcha" name="captcha">
+                    <reference name="head">
+                        <action method="addJs">
+                            <file>mage/captcha.js</file>
+                        </action>
+                    </reference>
+                    <action method="setFormId">
+                        <formId>user_create</formId>
+                    </action>
+                    <action method="setImgWidth">
+                        <width>230</width>
+                    </action>
+                    <action method="setImgHeight">
+                        <width>50</width>
+                    </action>
+                </block>
+            </block>
+        </reference>
+        <update handle="onestepcheckout_attributes_form_template_handle"/>
+    </customer_account_create>
+    <!--Checkout multishiping-->
+    <checkout_multishipping_customer_address translate="label">
+        <reference name="content">
+            <block type="customer/address_edit" name="customer_address_edit" template="customer/address/edit.phtml">
+                <action method="setTemplate">
+                    <template>magegiant/onestepcheckout/customer/address/edit.phtml</template>
+                </action>
+                <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_user_attributes">
+                    <action method="setFormCode">
+                        <code>customer_address_edit</code>
+                    </action>
+                </block>
+            </block>
+        </reference>
+        <update handle="onestepcheckout_attributes_form_template_handle"/>
+    </checkout_multishipping_customer_address>
+
+    <!--Checkout onepage-->
+    <checkout_onepage_index>
+        <reference name="checkout.onepage.billing">
+            <action method="setTemplate">
+                <template>magegiant/onestepcheckout/checkout/onepage/billing.phtml</template>
+            </action>
+            <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_customer_user_defined_attributes">
+                <action method="setFormCode">
+                    <code>checkout_register</code>
+                </action>
+            </block>
+            <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_billing_address_user_defined_attributes">
+                <action method="setFormCode">
+                    <code>customer_register_address</code>
+                </action>
+            </block>
+        </reference>
+        <reference name="checkout.onepage.shipping">
+            <action ifconfig="onestepcheckout/general/is_enabled" method="setTemplate">
+                <template>magegiant/onestepcheckout/checkout/onepage/shipping.phtml</template>
+            </action>
+            <block type="onestepcheckout/form" template="magegiant/onestepcheckout/customer/form/userattributes.phtml" name="customer_form_shipping_address_user_defined_attributes">
+                <action method="setFormCode">
+                    <code>customer_register_address</code>
+                </action>
+            </block>
+        </reference>
+        <update handle="onestepcheckout_attributes_form_template_handle"/>
+    </checkout_onepage_index>
+    <!--/Customer Attribute-->
+    <!--Intergrate 3D Checkout-->
+    <onestepcheckout_index_saveorder>
+        <remove name="right"/>
+        <remove name="left"/>
+        <block type="centinel/authentication" name="centinel.frame" template="centinel/authentication.phtml">
+            <action method="addRelatedBlock">
+                <blockId>checkout-review-submit</blockId>
+            </action>
+            <action method="addRelatedBlock">
+                <blockId>checkout-review-table-wrapper</blockId>
+            </action>
+            <action method="setAuthenticationStartMode">
+                <mode>instant</mode>
+            </action>
+        </block>
+        <block type="paypal/iframe" name="paypal.iframe"/>
+        <block type="directpost/form" name="payment.form.directpost" template="magegiant/onestepcheckout/container/form/payment/authorizenet/directpost/form.phtml">
+            <action method="setMethodInfo"></action>
+        </block>
+    </onestepcheckout_index_saveorder>
+    <!--/Intergrate 3D Checkout-->
+</layout>

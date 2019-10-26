@@ -1,0 +1,195 @@
+<?php
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2010-2011 Amasty (http://www.amasty.com)
+* @package Amasty_Imgupload
+*/ 
+?>
+
+<?php $_images  = $this->getImages(); ?>
+<?php $_product = $this->getCurrentProduct(); ?>
+
+
+<div id="unsupported" style="display: none;"><ul class="messages"><li class="error-msg"><ul><li><span>
+<?php echo $this->__('You are using unsupported browser version. Please update or change your browser. For the list of compatible browsers please check the extension website page.'); ?>
+</span></li></ul></li></ul></div>
+
+
+<fieldset id="amupload_form" action="<?php echo $this->getUrl('amimgupload/adminhtml_image/upload'); ?>">
+<input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>" />
+<input type="hidden" name="amimgupload_hasdata" value="1" />
+<input type="hidden" name="store" value="<?php echo $this->getStoreId(); ?>" />
+
+<script type="text/javascript">
+var imDragHandler  = '<?php echo Mage::getStoreConfig('amimgupload/ui/handler'); ?>';
+var imItemTemplate = '' +
+'<input type="hidden" name="amimgupload_new[{file}]" value="{url}" />' +
+'<div class="am_item" id="am_images_grid_amitem_{i}" onmouseover="javascript: itemOver(this);" onmouseout="javascript: itemOut(this);">' +
+'<div class="moveable"></div>' +
+'<div class="am_image"><img src="{url}" alt="" border="0" onload="javascript: resizeView(this);" /></div>' +
+'<div class="am_label"><input type="text" name="amimgupload[label][{file}]" class="input-text" value="" /></div>' +
+'<div class="am_types">' +
+    <?php foreach ($this->getImageTypes() as $imageType): ?>
+        '<div><input type="radio" name="product[<?php echo $imageType['field'] ?>]" value="{file}" /> <?php echo $imageType['label'] ?></div>' +
+    <?php endforeach; ?>
+'</div>' +
+'<div class="actions" align="right">&nbsp;'+
+    '<span style="display: none;">' +
+        '<input type="hidden" class="img-disable-input" name="amimgupload[disable][{file}]" value="0" />' +
+        '<input type="hidden" class="img-delete-input" name="amimgupload[delete][{file}]" value="0" />' +
+        '<input type="hidden" class="img-position-input" name="amimgupload[position][{file}]" value="{i}" />' +
+    
+        '<a href="#" class="enable" onclick="javascript: enableImage(this); return false;"><?php echo $this->__('Enable'); ?></a>' +
+        '<a href="#" class="disable" onclick="javascript: disableImage(this); return false;"><?php echo $this->__('Disable'); ?></a>' +
+        '&nbsp;' +
+        '<a href="#" class="delete" onclick="javascript: deleteImage(this); return false;"><?php echo $this->__('Delete'); ?></a>' +
+    '</span>' +
+'</div>' +
+'</div>';
+</script>
+<div id="am_images_grid_new_container"></div>
+
+<?php if (is_array($_images) && !empty($_images)): ?>
+
+
+    <div class="am_images_grid" id="am_images_grid">
+        <?php $i = 1; foreach ($_images as $image): ?>
+        
+            <div class="am_item <?php if (1 == $image['disabled']): ?>img-disabled<?php endif; ?>" id="am_images_grid_amitem_<?php echo $i; ?>" onmouseover="javascript: itemOver(this);" onmouseout="javascript: itemOut(this);">
+                <div class="moveable"></div>
+                <div class="am_image"><img src="<?php echo $image['url']; ?>" alt="" border="0" onload="javascript: resizeView(this);" /></div>
+                <div class="am_label"><input type="text" name="amimgupload[label][<?php echo $image['file'] ?>]" class="input-text" value="<?php echo $image['label']; ?>" /></div>
+                <div class="am_types">
+                    <?php foreach ($this->getImageTypes() as $imageType): ?>
+                        <div><input type="radio" name="product[<?php echo $imageType['field'] ?>]" value="<?php echo $image['file'] ?>" 
+                                <?php if ($image['file'] == $_product->getData($imageType['field'])): ?>checked="checked"<?php endif; ?> /> <?php echo $imageType['label'] ?></div>
+                    <?php endforeach; ?>
+                </div>
+                <div class="actions" align="right">&nbsp;
+                    <span style="display: none;">
+                        <input type="hidden" class="img-disable-input" name="amimgupload[disable][<?php echo $image['file'] ?>]" value="<?php if (1 == $image['disabled']): ?>1<?php else: ?>0<?php endif; ?>" />
+                        <input type="hidden" class="img-delete-input" name="amimgupload[delete][<?php echo $image['file'] ?>]" value="0" />
+                        <input type="hidden" class="img-position-input" name="amimgupload[position][<?php echo $image['file'] ?>]" value="<?php echo $image['position'] ?>" />
+                    
+                        <a href="#" class="enable" onclick="javascript: enableImage(this); return false;"><?php echo $this->__('Enable'); ?></a>
+                        <a href="#" class="disable" onclick="javascript: disableImage(this); return false;"><?php echo $this->__('Disable'); ?></a>
+                        &nbsp;
+                        <a href="#" class="delete" onclick="javascript: deleteImage(this); return false;"><?php echo $this->__('Delete'); ?></a>
+                    </span>
+                </div>
+            </div>
+            
+        <?php $i++; endforeach; ?>
+        
+        <script type="text/javascript">
+        <?php if ($this->isAjax()): ?>
+            amUploader  = new amUpload('amupload_form', 'grid_drop_area', 'file_select', 'upload_tracking_area', <?php echo $this->getProductId(); ?>, '<?php echo $this->getUrl('amimgupload/adminhtml_image/reloadtab', array('product_id' => $this->getProductId())); ?>');
+        <?php else: ?>
+            Event.observe(window, 'load', function(){
+                amUploader  = new amUpload('amupload_form', 'grid_drop_area', 'file_select', 'upload_tracking_area', <?php echo $this->getProductId(); ?>, '<?php echo $this->getUrl('amimgupload/adminhtml_image/reloadtab', array('product_id' => $this->getProductId())); ?>');
+            });
+        <?php endif; ?>
+        </script>
+        
+        <div style="float: left; width: 300px;">
+            <div id="grid_drop_area" class="dropable-grid dropable" style="display: none;">
+                <br /><br />
+                <span id="drag_text"><?php echo $this->__('Add new images:') . '<br />' . $this->__('Drag image files from your file browser here to upload'); ?></span>
+                <span id="drop_text" style="display: none;"><?php echo $this->__('Drop files to start uploading'); ?></span>
+            </div>
+            <div style="padding-top: 10px; text-align: center;">
+                <?php echo $this->__('Select multiple files to upload: '); ?> <input type="file" id="file_select" name="file_select[]" multiple="multiple" />
+            </div>
+        </div>
+        
+    </div>
+    
+    <div style="clear: both;"></div>
+    
+    
+<?php else: ?>
+
+
+    <script type="text/javascript">
+    <?php if ($this->isAjax()): ?>
+        amUploader  = new amUpload('amupload_form', 'drop_area', 'file_select', 'upload_tracking_area', <?php echo $this->getProductId(); ?>, '<?php echo $this->getUrl('amimgupload/adminhtml_image/reloadtab', array('product_id' => $this->getProductId())); ?>');
+    <?php else: ?>
+        Event.observe(window, 'load', function(){
+            amUploader  = new amUpload('amupload_form', 'drop_area', 'file_select', 'upload_tracking_area', <?php echo $this->getProductId(); ?>, '<?php echo $this->getUrl('amimgupload/adminhtml_image/reloadtab', array('product_id' => $this->getProductId())); ?>');
+        });
+    <?php endif; ?>
+    </script>
+
+    <div style="clear: both;"></div>
+    <div id="drop_area" class="dropable-large dropable" style="display: none;">
+        <br /><br /><br /><br />
+        <span id="drag_text"><?php echo $this->__('Drag image files from your file browser here to upload'); ?></span>
+        <span id="drop_text" style="display: none;"><?php echo $this->__('Drop files to start uploading'); ?></span>
+    </div>
+    <div style="padding-top: 10px;">
+        <?php echo $this->__('Select multiple files to upload: '); ?> <input type="file" id="file_select" name="file_select[]" multiple="multiple" />
+    </div>
+
+<?php endif; ?>
+
+<div id="upload_tracking_area"></div>
+
+</fieldset>
+
+<script type="text/javascript">
+Event.observe(window, 'load', function(){
+    if (!amUploader.supported())
+    {
+        $('amupload_form').remove();
+        $('unsupported').show();
+    }
+});
+</script>
+
+<?php if (!$this->isAjax()): ?>
+    <script type="text/javascript">
+    Event.observe(window, 'load', function(){
+        if (amUploader && amUploader.supported())
+        {
+            if ($('media_gallery_content'))
+            {
+                var searchElem = $('media_gallery_content').parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+                if (searchElem)
+                {
+	                var tabIdNum = searchElem.id.replace('group_fields', '');
+	                if (tabIdNum && $('product_info_tabs_group_' + tabIdNum))
+	                {
+	                    $('product_info_tabs').removeChild($('product_info_tabs_group_' + tabIdNum).parentNode);
+	                }
+                }
+            }
+        }
+    });
+    </script>
+<?php endif; ?>
+
+<script type="text/javascript">
+    <?php if (!$this->isAjax()): ?>
+    Event.observe(window, 'load', function(){
+    <?php endif; ?>
+        if ($('am_images_grid'))
+        {
+	        Sortable.create('am_images_grid', {
+	            tag: 'div',
+	            only: 'am_item',
+	            handles: $$('#am_images_grid div.' + imDragHandler),
+	            overlap: 'horizontal',
+	            constraint: false,
+	            onUpdate: function(){
+	                Sortable.sequence("am_images_grid").each(function(idNum, i){
+	                    $('am_images_grid_amitem_' + idNum).select('.img-position-input').each(function(input){
+	                        input.value = i + 1;
+	                    });
+	                });
+	            }
+	        });
+        }
+    <?php if (!$this->isAjax()): ?>
+    });
+    <?php endif; ?>
+</script>

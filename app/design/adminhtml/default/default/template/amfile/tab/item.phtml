@@ -1,0 +1,90 @@
+<?php
+    $item = $this->getItem();
+    $storeId = $this->getStoreId();
+?>
+
+<div class="box option-box">
+    <button type="button" class="form-button delete" title="Remove" /><span><?php echo $this->__('Delete File'); ?></span></button>
+
+    <input type="hidden" name="files[<?php echo $item->getId(); ?>][delete]" value="" class="delete-input" />
+
+    <table class="form-list file-form">
+        <thead>
+        <tr>
+            <th><?php echo $this->__('Title'); ?></th>
+            <th><?php echo $this->__('File Name'); ?></th>
+            <th>
+                <label>
+                    <input type="radio" name="files[<?php echo $item->getId(); ?>][use]" value="url" <?php if ($item->getFileLink()) echo 'checked';?> />
+                    <?php echo $this->__('File Url'); ?>
+                </label>
+            </th>
+            <th>
+                <label>
+                    <input type="radio" name="files[<?php echo $item->getId(); ?>][use]" value="file" <?php if (!$item->getFileLink()) echo 'checked';?>/>
+                    <?php echo $this->__('Upload File'); ?>
+                </label>
+            </th>
+            <th><?php echo $this->__('Sort Order'); ?></th>
+            <th><?php echo $this->__('Visible'); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <input type="text" class="input-text" name="files[<?php echo $item->getId(); ?>][title]" value="<?php echo $item->getLabel() ?>"
+                    <?php if ($item->getUseDefaultLabel())
+                        echo 'disabled';
+                    ?>
+                    />
+                <?php if ($storeId != 0): ?>
+                    <label>
+                        <input type="checkbox" class="default-value" name="files[<?php echo $item->getId(); ?>][default_title]" value=1
+                            <?php if ($item->getUseDefaultLabel())
+                                echo 'checked';
+                            ?>
+                            />
+                        <?php echo $this->__('Use Default Value'); ?>
+                    </label>
+                <?php endif; ?>
+            </td>
+            <td>
+                <input type="text" class="input-text file_url" name="files[<?php echo $item->getId(); ?>][file_name]" value="<?php echo $item->getFileName() ?>" />
+                <?php if ($item->getFileUrl()): ?>
+                    <a class='file' href="<?php echo $this->getUrl('amfile/file/download', array('file_id' => $item->getId()))?>"><?php echo $item->title()?></a>
+                <?php endif?>
+            </td>
+            <td>
+                <input type="text" class="input-text file_url" name="files[<?php echo $item->getId(); ?>][file_link]" value="<?php echo $item->getFileLink()?>" />
+            </td>
+            <td>
+                <input type="file" title="File" name="files[<?php echo $item->getId(); ?>][file]">
+                <div class="drop" style="display: none">Click or drop files here</div>
+            </td >
+            <td>
+                <input type="text" class="input-text" name="files[<?php echo $item->getId(); ?>][position]" value="<?php echo $item->getPosition()?>" />
+            </td>
+            <td>
+                <select name="files[<?php echo $item->getId(); ?>][visible]" <?php
+                if ($item->getUseDefaultVisible())
+                    echo 'disabled';
+                ?>>
+                    <?php foreach (array(1 => 'Yes', 0 => 'No') as $k => $v)
+                        echo "<option value='{$k}' ".($item->getVisible() == $k ? 'selected' : null).">{$this->__($v)}</option>";
+                    ?>
+                </select>
+                <?php if ($storeId != 0): ?>
+                    <label>
+                        <input type="checkbox" class="default-value" name="files[<?php echo $item->getId(); ?>][default_visible]" value=1
+                            <?php if ($item->getUseDefaultVisible())
+                                echo 'checked';
+                            ?>
+                            />
+                        <?php echo $this->__('Use Default Value'); ?>
+                    </label>
+                <?php endif; ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

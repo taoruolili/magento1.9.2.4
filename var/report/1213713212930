@@ -1,0 +1,25 @@
+a:5:{i:0;s:1172:"SELECT `e`.*, IF(at_custom_use_parent_settings.value_id > 0, at_custom_use_parent_settings.value, at_custom_use_parent_settings_default.value) AS `custom_use_parent_settings` FROM `catalog_category_entity` AS `e`
+ LEFT JOIN `catalog_category_entity_int` AS `at_custom_use_parent_settings_default` ON (`at_custom_use_parent_settings_default`.`entity_id` = `e`.`entity_id`) AND (`at_custom_use_parent_settings_default`.`attribute_id` = '68') AND `at_custom_use_parent_settings_default`.`store_id` = 0
+ LEFT JOIN `catalog_category_entity_int` AS `at_custom_use_parent_settings` ON (`at_custom_use_parent_settings`.`entity_id` = `e`.`entity_id`) AND (`at_custom_use_parent_settings`.`attribute_id` = '68') AND (`at_custom_use_parent_settings`.`store_id` = 1) WHERE (`e`.`entity_type_id` = '3') AND (`e`.`entity_id` IN('60', '45', '2', '1')) AND (((IF(at_custom_use_parent_settings.value_id > 0, at_custom_use_parent_settings.value, at_custom_use_parent_settings_default.value) = 0) OR (IF(at_custom_use_parent_settings.value_id > 0, at_custom_use_parent_settings.value, at_custom_use_parent_settings_default.value) IS NULL))) AND (`e`.`level` != 0) ORDER BY `e`.`level` DESC
+
+";i:1;s:2949:"#0 /www/wwwroot/popkicksneakers.com/lib/Varien/Db/Statement/Pdo/Mysql.php(110): Zend_Db_Statement_Pdo->_execute(Array)
+#1 /www/wwwroot/popkicksneakers.com/app/code/core/Zend/Db/Statement.php(291): Varien_Db_Statement_Pdo_Mysql->_execute(Array)
+#2 /www/wwwroot/popkicksneakers.com/lib/Zend/Db/Adapter/Abstract.php(480): Zend_Db_Statement->execute(Array)
+#3 /www/wwwroot/popkicksneakers.com/lib/Zend/Db/Adapter/Pdo/Abstract.php(238): Zend_Db_Adapter_Abstract->query('SELECT `e`.*, I...', Array)
+#4 /www/wwwroot/popkicksneakers.com/lib/Varien/Db/Adapter/Pdo/Mysql.php(504): Zend_Db_Adapter_Pdo_Abstract->query('SELECT `e`.*, I...', Array)
+#5 /www/wwwroot/popkicksneakers.com/lib/Zend/Db/Adapter/Abstract.php(737): Varien_Db_Adapter_Pdo_Mysql->query('SELECT `e`.*, I...', Array)
+#6 /www/wwwroot/popkicksneakers.com/lib/Varien/Data/Collection/Db.php(740): Zend_Db_Adapter_Abstract->fetchAll('SELECT `e`.*, I...', Array)
+#7 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Eav/Model/Entity/Collection/Abstract.php(1045): Varien_Data_Collection_Db->_fetchAll('SELECT `e`.*, I...')
+#8 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Eav/Model/Entity/Collection/Abstract.php(871): Mage_Eav_Model_Entity_Collection_Abstract->_loadEntities(false, false)
+#9 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Catalog/Model/Resource/Category/Collection.php(225): Mage_Eav_Model_Entity_Collection_Abstract->load(false, false)
+#10 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Catalog/Model/Resource/Category.php(625): Mage_Catalog_Model_Resource_Category_Collection->load()
+#11 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Catalog/Model/Category.php(859): Mage_Catalog_Model_Resource_Category->getParentDesignCategory(Object(Mage_Catalog_Model_Category))
+#12 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Catalog/Model/Design.php(349): Mage_Catalog_Model_Category->getParentDesignCategory(Object(Mage_Catalog_Model_Category))
+#13 /www/wwwroot/popkicksneakers.com/app/code/local/Smartwave/Ajaxcatalog/controllers/Catalog/CategoryController.php(68): Mage_Catalog_Model_Design->getDesignSettings(Object(Mage_Catalog_Model_Category))
+#14 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Core/Controller/Varien/Action.php(418): Smartwave_Ajaxcatalog_Catalog_CategoryController->viewAction()
+#15 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Core/Controller/Varien/Router/Standard.php(254): Mage_Core_Controller_Varien_Action->dispatch('view')
+#16 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Core/Controller/Varien/Front.php(172): Mage_Core_Controller_Varien_Router_Standard->match(Object(Mage_Core_Controller_Request_Http))
+#17 /www/wwwroot/popkicksneakers.com/app/code/core/Mage/Core/Model/App.php(365): Mage_Core_Controller_Varien_Front->dispatch()
+#18 /www/wwwroot/popkicksneakers.com/app/Mage.php(684): Mage_Core_Model_App->run(Array)
+#19 /www/wwwroot/popkicksneakers.com/index.php(84): Mage::run('', 'store')
+#20 {main}";s:3:"url";s:62:"/air-jordan-shoes/cheap-air-jordan-shoes-sneaker-for-sale.html";s:11:"script_name";s:10:"/index.php";s:4:"skin";s:7:"default";}

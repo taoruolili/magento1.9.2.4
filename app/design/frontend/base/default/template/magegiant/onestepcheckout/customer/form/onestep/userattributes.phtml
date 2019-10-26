@@ -1,0 +1,16 @@
+<?php
+?>
+<?php
+/**
+ * Create account form template
+ *
+ */
+?>
+<?php if ($this->hasUserDefinedAttributes()): ?>
+    <?php foreach ($this->getUserDefinedAttributesByCode($this->getGiantOscAttributeCode()) as $attribute): ?>
+        <?php $attributeContent = $this->getAttributeHtml($attribute); ?>
+        <?php if ($attributeContent): ?>
+            <?php echo $attributeContent; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+<?php endif; ?>

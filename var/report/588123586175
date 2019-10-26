@@ -1,0 +1,9 @@
+a:5:{i:0;s:211:"Error in file: "/home/leadsole/public_html/app/code/local/Biztech/Trackorder/sql/trackorder_setup/mysql4-upgrade-0.1.0-0.1.1.php" - SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'track_link'";i:1;s:978:"#0 /home/leadsole/public_html/app/code/core/Mage/Core/Model/Resource/Setup.php(644): Mage::exception('Mage_Core', 'Error in file: ...')
+#1 /home/leadsole/public_html/app/code/core/Mage/Core/Model/Resource/Setup.php(437): Mage_Core_Model_Resource_Setup->_modifyResourceDb('upgrade', '0.1.0', '0.1.5')
+#2 /home/leadsole/public_html/app/code/core/Mage/Core/Model/Resource/Setup.php(320): Mage_Core_Model_Resource_Setup->_upgradeResourceDb('0.1.0', '0.1.5')
+#3 /home/leadsole/public_html/app/code/core/Mage/Core/Model/Resource/Setup.php(235): Mage_Core_Model_Resource_Setup->applyUpdates()
+#4 /home/leadsole/public_html/app/code/core/Mage/Core/Model/App.php(428): Mage_Core_Model_Resource_Setup::applyAllUpdates()
+#5 /home/leadsole/public_html/app/code/core/Mage/Core/Model/App.php(354): Mage_Core_Model_App->_initModules()
+#6 /home/leadsole/public_html/app/Mage.php(684): Mage_Core_Model_App->run(Array)
+#7 /home/leadsole/public_html/index.php(84): Mage::run('', 'store')
+#8 {main}";s:3:"url";s:72:"/index.php/alisenadmin/cache/index/key/2fbe6e118cb6564190a9db4b83bbe0ae/";s:11:"script_name";s:10:"/index.php";s:4:"skin";s:7:"default";}

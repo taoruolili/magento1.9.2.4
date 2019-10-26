@@ -1,0 +1,24 @@
+<?php $_order = $this->getOrder() ?>
+<?php if ($_order): ?>
+    <?php $i = 0;
+    foreach ($_order->getAllItems() as $_item): ?>
+        <?php if ($_item->getParentItem()) continue; else $i++; ?>
+        <tr>
+            <td>
+                <?php echo $i ?>
+            </td>
+            <td>
+                <?php echo $_item->getName(); ?>
+            </td>
+            <td>
+                <?php echo $_item->getSku()?>
+            </td>
+            <td>
+                <?php echo $_item->getTotalQty()?>
+            </td>
+            <td>
+                <?php echo Mage::helper('core')->currency($_item->getRowTotal(),true,false)?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+<?php endif ?>

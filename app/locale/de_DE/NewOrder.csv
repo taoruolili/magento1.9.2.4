@@ -1,0 +1,62 @@
+There was an error occurred during paying process.,Es gab einen Fehler beim Bezahlvorgang aufgetreten !
+
+"Payment Result","Payment Ergebnis "
+"Failure reason","Gründe für die Nichtzahlung " 
+"Transaction failure","Erfolglose Zahlungen !"
+"Payment exception","Zahlung ausgenommen, kontaktieren Sie bitte den Einkaufs Eigentümer zu lösen !"
+"Payment is failure, the data Validation failed","Die Datenüberprüfung ist fehlgeschlagen, kontaktieren Sie bitte den Einkaufs Besitzer, sie zu lösen !"
+"Your order payment is failure","Ihre Bestellung Zahlung Ausfall, zahlen Sie bitte wieder !"
+"Thank you for your purchase","Ihre Zahlung erfolgreich ist, ich danke Ihnen für Ihren Kauf !"
+"Your order payment is processing","Warten Sie einen Moment, ist die Auftragsbearbeitung, nicht später noch einmal bezahlen !"
+"Your order has been succeed","Ihre Bestellung wurde erfolgreich !"
+"You will receive an order confirmation email with details of your order and a link to track its progress","Sie erhalten eine Auftragsbestätigung per E-Mail mit Einzelheiten zur Bestellung und einen Link zu seinem Fortschritt zu verfolgen erhalten !"
+"Your Order No","Bestellnummer"
+"Continue Checkout","Weiter zu bezahlen"
+"Continue Shopping","Weiter Einkaufen"
+
+Bank,Bank
+Credit Mutuel,Credit Mutuel
+Customer returned from NewOrder creditcard.,Customer returned from NewOrder creditcard.
+Customer successfully returned from NewOrder creditcard,Customer successfully returned from NewOrder creditcard
+Customer was redirected to NewOrder creditcard,Customer was redirected to NewOrder creditcard
+CosmoCommerce creditcard Payment," ""NewOrder Creditcard Payment"""
+Service Type,Service Type
+Default NewOrder creditcard Interface language,Default NewOrder creditcard Interface language
+Dutch,Dutch
+Enabled,Enabled
+English,English
+Error occured,Error occured
+French,French
+German,German
+Groupe CIC,Groupe CIC
+Italian,Italian
+Key,Key
+Merchant No.,Merchant No.
+SignKey Code,Gateway corresponding key
+Transport URL,Transaction gateway submitted address
+New order status,New order status
+OBC,OBC
+Order %s,Order %s
+Order number will be used if left empty,Order number will be used if left empty
+Order status when payment accepted by NewOrder creditcard," ""Order status when payment accepted by NewOrder creditcard"""
+Order status when payment refused by NewOrder creditcard," ""Order status when payment refused by NewOrder creditcard"""
+Payment accepted by NewOrder creditcard," ""Payment accepted by NewOrder creditcard"""
+Payment from Specific countries,Payment from Specific countries
+Payment from applicable countries,Payment from applicable countries
+Payment refused by NewOrder creditcard," ""Payment refused by NewOrder creditcard"""
+Preference will be given to store language chosen by the user," ""Preference will be given to store language chosen by the user"""
+Returned MAC is invalid. Order cancelled.,Returned MAC is invalid. Order cancelled.
+SHA key,SHA key
+Site code,Site code
+Sort order,Sort order
+Spain,Spain
+TPE number,TPE number
+Test mode,Test mode
+There was an error occurred during paying process.,There was an error occurred during paying process.
+Title,Title
+Transaction Description,Transaction Description
+You will be redirected to NewOrder creditcard in a few seconds.,You will be redirected to NewOrder creditcard in a few seconds.
+You will be redirected to NewOrder creditcard website when you place an order.,You will be redirected to NewOrder creditcard website when you place an order.
+Products,Products
+Virtual Products,Virtual Products
+Virtual Products2,Virtual Products2

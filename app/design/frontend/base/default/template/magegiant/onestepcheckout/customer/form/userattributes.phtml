@@ -1,0 +1,30 @@
+<?php
+?>
+<?php
+/**
+ * Create account form template
+ *
+ */
+?>
+<?php if ($this->hasUserDefinedAttributes()): ?>
+    <?php if ($this->isShowContainer()): ?>
+        <div class="fieldset">
+            <h2 class="legend"><?php echo $this->__('Additional Information') ?></h2>
+            <ul class="form-list">
+                <?php foreach ($this->getUserDefinedAttributes() as $attribute): ?>
+                    <?php $attributeContent = $this->getAttributeHtml($attribute); ?>
+                    <?php if ($attributeContent): ?>
+                        <li><?php echo $attributeContent; ?></li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php else: ?>
+        <?php foreach ($this->getUserDefinedAttributes() as $attribute): ?>
+            <?php $attributeContent = $this->getAttributeHtml($attribute); ?>
+            <?php if ($attributeContent): ?>
+                <?php echo $attributeContent; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+<?php endif; ?>

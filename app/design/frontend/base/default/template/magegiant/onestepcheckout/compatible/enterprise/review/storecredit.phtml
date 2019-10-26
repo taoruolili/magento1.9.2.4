@@ -1,0 +1,55 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?><?php if ($this->canShow() && $this->isEnabledStoreCreditBlock()): ?>
+    <div id="one-step-checkout-review-enterprise-storecredit" class="block-wrapper">
+        <?php if ($this->isEnabledStoreCreditBlock()): ?>
+            <div class="enterprise-storecredit-message-container" style="overflow:hidden;height:0px;"></div>
+        <?php
+        $storeCreditBalance = $this->getBalance();
+        ?>
+            <div class="field-row">
+                <input type="checkbox" name="payment[use_customer_balance]" value="1"
+                       id="use_customer_balance"<?php echo $this->isCustomerBalanceUsed() ? ' checked="checked"' : '' ?>
+                       class="checkbox"/>
+                <label for="use_customer_balance">
+                    <?php echo Mage::helper('enterprise_customerbalance')->__('Use Store Credit (%s available)', $this->formatPrice($this->getBalance())); ?>
+                </label>
+            </div>
+
+            <script type="text/javascript">
+                //<![CDATA[
+                var giantOSCEnterpriseStorecredit = new MagegiantOneStepCheckoutEnterpriseStoreCredit({
+                    containerSelector: '#one-step-checkout-review-enterprise-storecredit',
+                    msgContainerSelector: '.enterprise-storecredit-message-container',
+                    cancelCreditElSelector: 'tr th a',
+                    useStorecreditCheckbox: "use_customer_balance",
+                    applyStorecreditUrl: '<?php echo $this->getApplyStorecreditAjaxUrl();?>',
+                    actionPattern: <?php echo $this->getActionEEPattern()?>,
+                    successMessageBoxCssClass: 'one-step-checkout-success-msg',
+                    errorMessageBoxCssClass: 'one-step-checkout-error-msg',
+                    jsErrorMsg: "<?php echo $this->__("Can not apply store credit"); ?>",
+                    jsSuccessMsg: "<?php $this->__("Ok"); ?>"
+                });
+                //]]>
+            </script>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,108 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?><?php if ($this->getItemCount()): ?>
+    <div id="one-step-checkout-related-crosssell">
+        <div>
+            <h2><?php echo $this->__('Related Products:') ?></h2>
+        </div>
+        <ol id="block-related" class="row-mg">
+            <?php foreach ($this->getItems() as $_item): ?>
+                <li id="related-item-<?php echo $_item->getId() ?>">
+                    <a class="product-image" href="<?php echo $_item->getProductUrl() ?>"
+                       title="<?php echo $this->htmlEscape($_item->getName()) ?>"><img
+                            src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(150, 150); ?>"
+                            alt="<?php echo $this->htmlEscape($_item->getName()) ?>"/></a>
+
+                    <div class="product-details">
+                        <h3 class="product-name"><a
+                                href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->htmlEscape($_item->getName()) ?></a>
+                        </h3>
+                        <?php echo $this->getPriceHtml($_item, true) ?>
+                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart"
+                                onclick="setLocation('<?php echo $this->getAddToCartUrl($_item) ?>')">
+                            <span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                        <ul class="add-to-links">
+                            <?php if ($this->isCanManageWishlist()): ?>
+                                <?php if ($this->isNotAddedToWishlist($_item)): ?>
+                                    <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                        <li><a href="javascript:void(0)"
+                                               id="<?php echo 'product-wishlist-' . $_item->getId() ?>"
+                                               class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <li><?php echo $this->__('Added to Wishlist') ?></li>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <?php if ($this->isNotAddedToCompareList($_item)): ?>
+                                <?php if ($_compareUrl = $this->getAddToCompareUrl($_item)): ?>
+                                    <li><span class="separator">|</span> <a href="javascript:void(0)"
+                                                                            id="<?php echo 'product-compare-' . $_item->getId() ?>"
+                                                                            class="link-compare"><?php echo $this->__('Add to Compare') ?></a>
+                                    </li>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <li><span class="separator">|</span><?php echo $this->__('Added to Compare') ?></li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+        <script>
+            //<![CDATA[
+
+            /*Jquery owlCarousel*/
+            jQuery(document).ready(function ($) {
+                $("#block-related").owlCarousel({
+                    itemsCustom: [
+                        [0, 1],
+                        [480, 2],
+                        [768, 3],
+                        [992, 4],
+                        [1200, 5]
+                    ],
+                    autoPlay: true,
+                    slideSpeed: 500,
+                    navigation: true,
+                    pagination: false,
+                    stopOnHover: true,
+                    lazyLoad: true,
+                    mouseDrag: true,
+                    touchDrag: true,
+                    autoHeight: true,
+                    addClassActive: true,
+                    responsive: true
+                });
+            });
+            var giantOSCCompareWishlist = new MagegiantOneStepCheckoutCompareWishlist({
+                addToContainer: '#one-step-checkout-related-crosssell',
+                productImageClass: '.product-image',
+                addToCompareLinks: '#one-step-checkout-related-crosssell .link-compare',
+                addToWishlistLinks: '#one-step-checkout-related-crosssell .link-wishlist',
+                addToCompareUrl: '<?php echo $this->getUrlToAddProductToCompareList();?>',
+                addToWishlistUrl: '<?php echo $this->getUrlToAddProductToWishlist();?>'
+            });
+            decorateList('block-related', 'none-recursive');
+            //]]>
+        </script>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+    <default>
+        <reference name="left">
+            <block type="detailedreview/recentlyReviews" name="recently_reviews" after="-">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/recently_reviews.phtml</template></action>
+            </block>
+        </reference>
+        <reference name="before_body_end">
+            <block type="core/template" name="detailedreview_header_include_js">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/include_js.phtml</template></action>
+            </block>
+            <block type="detailedreview/css" name="detailedreview_header_css">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/css.phtml</template></action>
+            </block>
+            <block type="detailedreview/css" name="detailedreview_header_include_css">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/include_css.phtml</template></action>
+            </block>
+            <block type="core/template" name="detailedreview_header_timezone">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/timezone.phtml</template></action>
+            </block>
+        </reference>
+    </default>
+
+    <customer_account>
+        <remove name="recently_reviews" />
+        <reference name="customer_account_navigation">
+            <action method="addLink" ifconfig="detailedreview/settings/enable" translate="label" module="review"><name>reviews</name><path>review/customer</path><label>My Reviews</label></action>
+        </reference>
+    </customer_account>
+
+    <customer_account_index>
+        <!--<reference name="customer_account_dashboard">-->
+        <!--<block type="review/customer_recent" name="customer_account_dashboard_info1" as="info1" template="review/customer/recent.phtml"/>-->
+        <!--</reference>-->
+        <remove name="customer_account_dashboard_info1" />
+    </customer_account_index>
+
+    <catalog_product_view>
+        <reference name="head">
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery-ui.css</name></action>
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery.lightbox-0.5.css</name></action>
+        </reference>
+
+        <block name="product.info.tabs">
+            <action method="addTab" ifconfig="detailedreview/settings/enable"><alias>tab_reviews</alias><title>Product Reviews</title><block>review/product_view_list</block><template>detailedreview/wrapper.phtml</template></action>
+            <action method="unsetChild" ifconfig="detailedreview/settings/enable" ><block>reviews</block></action>
+        </block>
+
+        <block type="page/html_wrapper" name="review-wrapper">
+            <block type="detailedreview/rating_entity_detailed" name="reviews_detailed"/>
+            <block type="detailedreview/page_html_pager" name="product_review_list.toolbar"/>
+            <block type="detailedreview/product_view_list" name="reviews_list" as="reviews_list" after="reviews_detailed" template="detailedreview/review/product/view/list.phtml">
+                <block type="detailedreview/customer_form_login" name="customer_form_login" template="detailedreview/customer/form/login.phtml"/>
+                <block type="detailedreview/customer_form_register" name="customer_form_register" template="detailedreview/customer/form/register.phtml">
+                    <block type="page/html_wrapper" name="customer.form.register.fields.before" as="form_fields_before" translate="label">
+                        <label>Form Fields Before</label>
+                    </block>
+                </block>
+                <block type="detailedreview/review_form" name="product.review.form" as="review_form" template="detailedreview/review/form.phtml">
+                    <block type="page/html_wrapper" name="product.review.form.fields.before" as="form_fields_before" translate="label">
+                        <label>Review Form Fields Before</label>
+                        <action method="setMayBeInvisible"><value>1</value></action>
+                    </block>
+                </block>
+            </block>
+        </block>
+
+        <reference name="content">
+            <block type="core/template" name="reviews_wrapper">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/wrapper.phtml</template></action>
+                <action method="insert"><child>review-wrapper</child></action>
+            </block>
+            <action method="unsetChild" ifconfig="detailedreview/settings/reviews_in_tab"><block>reviews_wrapper</block></action>
+        </reference>
+
+        <reference name="tab_reviews">
+            <action method="insert" ifconfig="detailedreview/settings/enable"><child>review-wrapper</child></action>
+        </reference>
+
+        <reference name="before_body_end">
+            <block type="detailedreview/js" after="detailedreview_header_timezone" name="detailedreview_header_js">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/js.phtml</template></action>
+            </block>
+            <block type="core/template" after="detailedreview_header_js" name="detailedreview_header_include_css">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/include_css.phtml</template></action>
+            </block>
+        </reference>
+    </catalog_product_view>
+
+    <catalog_category_layered translate="label">
+        <reference name="head">
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery-ui.css</name></action>
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery.lightbox-0.5.css</name></action>
+            <block type="core/template" name="detailedreview_header_include_css">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/include_css.phtml</template></action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="detailedreview/recentlyReviews" name="recently_reviews_category" after="-">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/recently_reviews.phtml</template></action>
+                <action method="setIsPerCategory"><value>1</value></action>
+            </block>
+        </reference>
+    </catalog_category_layered>
+
+    <catalog_category_default translate="label">
+        <reference name="head">
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery-ui.css</name></action>
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery.lightbox-0.5.css</name></action>
+            <block type="core/template" name="detailedreview_header_include_css">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/include_css.phtml</template></action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="detailedreview/recentlyReviews" name="recently_reviews_category" after="-">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/recently_reviews.phtml</template></action>
+                <action method="setIsPerCategory"><value>1</value></action>
+            </block>
+        </reference>
+    </catalog_category_default>
+
+    <review_customer_index translate="label">
+        <reference name="head">
+            <block type="core/template" name="detailedreview_header_include_css">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/include_css.phtml</template></action>
+            </block>
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery-ui.css</name></action>
+            <action method="addItem" ifconfig="detailedreview/settings/enable"><type>skin_css</type><name>css/detailedreview/jquery.lightbox-0.5.css</name></action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="detailedreview/customer_list" name="review_customer_list">
+                <action method="setTemplate" ifconfig="detailedreview/settings/enable"><template>detailedreview/customer/list.phtml</template></action>
+            </block>
+        </reference>
+    </review_customer_index>
+
+    <review_product_post>
+        <update handle="catalog_product_view" />
+    </review_product_post>
+
+    <!--<review_customer_view translate="label">-->
+    <!--<label>Customer My Account Review Details</label>-->
+    <!--<reference name="my.account.wrapper">-->
+    <!--<block type="review/customer_view" name="customers_review"/>-->
+    <!--</reference>-->
+    <!--</review_customer_view>-->
+
+
+
+
+</layout>

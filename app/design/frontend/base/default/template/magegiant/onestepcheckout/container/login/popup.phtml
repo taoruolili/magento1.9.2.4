@@ -1,0 +1,123 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?>
+<div class="one-step-checkout-login-popup-content">
+    <div id="one-step-checkout-login-popup-content-login">
+        <div class="onestep-title login-title">
+            <h2><?php echo $this->__('Login'); ?></h2>
+        </div>
+        <form id="one-step-checkout-login-form" action=""
+              method="post">
+            <div class="form-list">
+                <div class="one-step-checkout-auth-form-block">
+                    <label for="login-email"
+                           class="required"><em>*</em><?php echo $this->__('Email Address') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" class="input-text required-entry validate-email"
+                               id="login-email"
+                               name="login[username]" value="<?php echo $this->getUsername() ?>"/>
+                    </div>
+                </div>
+                <div class="one-step-checkout-auth-form-block">
+                    <label for="login-password"
+                           class="required"><em>*</em><?php echo $this->__('Password') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="password" class="input-text required-entry validate-password"
+                               id="login-password" name="login[password]"/>
+                    </div>
+                </div>
+                <div class="one-step-checkout-auth-form-block">
+                    <ul>
+                        <?php echo $this->getChildHtml('form.captcha.login'); ?>
+                    </ul>
+                </div>
+                <div class="one-step-checkout-auth-form-block">
+                    <a id="one-step-checkout-login-forgot-link"
+                       href="javascript:void(0);"><?php echo $this->__('Forgot your password?') ?></a>
+                    <button type="button" class="button" id="one-step-checkout-login-submit-btn">
+                        <span><span><?php echo $this->__('Login') ?></span></span>
+                    </button>
+                    <div style="clear:both;"></div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div id="one-step-checkout-login-popup-content-forgot-password" style="display: none">
+        <div class="onestep-title forgot-pass-title">
+            <h2><?php echo $this->__('Forgotten your password?'); ?></h2>
+        </div>
+        <form id="one-step-checkout-forgot-password-form"
+              action="<?php echo $this->getForgotAction() ?>" method="post">
+            <div class="form-list">
+                <p class="note-popup"><?php echo $this->__('Please enter your email below and we will send you a new password.'); ?></p>
+
+                <div class="one-step-checkout-auth-form-block">
+                    <label for="forgot-password-email"
+                           class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+
+                    <div class="input-box">
+                        <input type="text" class="input-text required-entry validate-email"
+                               id="forgot-password-email" name="email"
+                               value="<?php echo $this->getUsername() ?>"/>
+                    </div>
+                </div>
+                <div class="one-step-checkout-auth-form-block">
+                    <ul>
+                        <?php echo $this->getChildHtml('form.captcha.forgot'); ?>
+                    </ul>
+                </div>
+                <div class="one-step-checkout-auth-form-block">
+                    <button type="button" class="button"
+                            id="one-step-checkout-forgot-password-submit-btn">
+                        <span><span><?php echo $this->__('Submit') ?></span></span>
+                    </button>
+                </div>
+                <div class="one-step-checkout-auth-form-block last">
+                    <a id="one-step-checkout-forgot-password-back-link"
+                       href="javascript:void(0);"><?php echo $this->__('Return to Login') ?></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    //<![CDATA[
+    new MagegiantOneStepCheckoutAuthentication({
+        popupContainer: 'one-step-checkout-login-popup',
+        loginContainer: 'one-step-checkout-login-popup-content-login',
+        forgotContainer: 'one-step-checkout-login-popup-content-forgot-password',
+        forgotLink: 'one-step-checkout-login-forgot-link',
+        backLink: 'one-step-checkout-forgot-password-back-link',
+        loginSubmitBtn: 'one-step-checkout-login-submit-btn',
+        forgotSubmitBtn: 'one-step-checkout-forgot-password-submit-btn',
+        loginUrl: '<?php echo $this->getLoginUrl()?>',
+        forgotUrl: '<?php echo $this->getForgotUrl()?>',
+        loadingClass: 'authentication-ajax-loading',
+        errorClass: 'one-step-checkout-error-msg',
+        successClass: 'one-step-checkout-success-msg'
+    });
+    //]]>
+</script>

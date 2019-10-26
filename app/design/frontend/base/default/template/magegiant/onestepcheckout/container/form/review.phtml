@@ -1,0 +1,102 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?>
+<div class="col-wrapper" id="one-step-checkout-order-review">
+    <?php $blockNumber = $this->getNumbering(true); ?>
+    <?php if ($blockNumber): ?>
+        <div class="onestep-title-number">
+            <h2>
+                <span class="one-step-checkout-number"><?php echo $blockNumber . '. '; ?></span>
+                <?php echo $this->__('ORDER REVIEW'); ?></h2>
+        </div>
+    <?php else: ?>
+        <div class="onestep-title review-title">
+            <h2><?php echo $this->__('ORDER REVIEW'); ?></h2>
+        </div>
+    <?php endif; ?>
+    <div class="one-step-checkout-order-review-cart">
+        <?php echo $this->getChildHtml('review.items') ?>
+    </div>
+    <p class="col-wide forgot-item">
+            <span>
+                 <?php echo $this->__('Forgot an item?') ?>&nbsp;<a
+                    href="<?php echo $this->getUrl('checkout/cart') ?>"><?php echo $this->__('Edit your cart') ?></a>
+            </span>
+    </p>
+
+    <div class="giant-clear"></div>
+    <div class="row-mg">
+        <div class="col-mg mg-lg-6 mg-md-6 mg-sm-12 mg-xs-6">
+            <div id="one-step-checkout-review-coupon">
+                <?php echo $this->getChildHtml('review.coupon') ?>
+            </div>
+        </div>
+        <!--Intergrate Enterprise-->
+        <?php if (Mage::helper('core')->isModuleEnabled('Enterprise_GiftCard')): ?>
+            <div id="one-step-checkout-order-review-enterprise-giftcard-wrapper"
+                 class="col-mg mg-lg-6 mg-md-6 mg-sm-12 mg-xs-6">
+                <?php echo $this->getChildHtml('review.enterprise.giftcard'); ?>
+            </div>
+        <?php endif; ?>
+        <?php if (Mage::helper('core')->isModuleEnabled('Enterprise_CustomerBalance')): ?>
+            <div id="one-step-checkout-order-review-enterprise-storecredit-wrapper"
+                 class="col-mg mg-lg-6 mg-md-6 mg-sm-12 mg-xs-6">
+                <?php echo $this->getChildHtml('review.enterprise.storecredit'); ?>
+            </div>
+        <?php endif; ?>
+        <?php if (Mage::helper('core')->isModuleEnabled('Enterprise_Reward')): ?>
+            <div id="one-step-checkout-order-review-enterprise-points-wrapper"
+                 class="col-mg mg-lg-6 mg-md-6 mg-sm-12 mg-xs-6">
+                <?php echo $this->getChildHtml('review.enterprise.points'); ?>
+            </div>
+        <?php endif; ?>
+        <!--/Intergrate Enterprise-->
+        <?php echo $this->getChildHtml('review.comment') ?>
+    </div>
+    <div class="row-mg giant-clear">
+        <div class="col-mg mg-lg-6 mg-md-6 mg-sm-12 mg-xs-12">
+            <?php if (
+                $this->getChildHtml('review.giftmessage') != ''
+                || $this->getChildHtml('review.giftwrap') != ''
+                || $this->getChildHtml('review.delivery') != ''
+                || $this->getChildHtml('review.newsletter') != ''
+                || $this->getChildHtml('review.survey') != ''
+            ):?>
+                <div class="block-wrapper">
+                    <?php echo $this->getChildHtml('review.giftmessage'); ?>
+                    <?php echo $this->getChildHtml('review.giftwrap'); ?>
+                    <?php echo $this->getChildHtml('review.delivery'); ?>
+                    <?php echo $this->getChildHtml('review.newsletter'); ?>
+                    <?php echo $this->getChildHtml('review.survey'); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="col-mg mg-lg-6 mg-md-6 mg-sm-12 mg-xs-12">
+            <div class="block-wrapper block-order">
+                <?php echo $this->getChildHtml('review.term'); ?>
+                <?php echo $this->getChildHtml('review.place.order') ?>
+            </div>
+        </div>
+    </div>
+    <div id="one-step-checkout-order-review-extra-wrapper">
+        <?php echo $this->getChildHtml('review.extra'); ?>
+    </div>
+</div>

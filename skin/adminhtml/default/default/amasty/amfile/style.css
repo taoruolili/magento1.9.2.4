@@ -1,0 +1,78 @@
+#amfile-uploads .box
+{
+    position: relative;
+}
+
+#amfile-uploads .box .preloader
+{
+    background-color: #FFF4E9;
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0.9;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+#amfile-uploads .box .preloader img
+{
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px;
+    position: absolute;
+}
+
+#amfile-uploads .form-button.delete
+{
+    float: right;
+}
+
+#amfile-uploads .file-form
+{
+    display: inline;
+}
+
+#amfile-uploads .file-form td,
+#amfile-uploads .file-form th
+{
+    padding: 0 7px;
+}
+
+#amfile-uploads input[name*=position]
+/*#amfile-uploads select[name*=exclude]*/
+{
+    width: 50px;
+}
+
+#amfile-uploads input[type=text],
+#amfile-uploads select
+{
+    display: block;
+}
+
+#amfile-uploads .drop
+{
+    background-color: #FFFFFF;
+    border: 2px dashed grey;
+    color: #808080;
+    font-size: 13px;
+    margin: 5px 0;
+    padding: 6px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#amfile-uploads .drop.hover
+{
+    color: #090;
+    border-color: #090;
+    border-style: solid;
+}
+
+#amfile-uploads .file
+{
+    display: block;
+    width: 126px;
+    word-break: break-word;
+}

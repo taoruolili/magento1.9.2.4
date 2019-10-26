@@ -1,0 +1,18 @@
+#amfile-list .file
+{
+    display: block;
+    height: 26px;
+}
+
+#amfile-list img
+{
+    max-width: 24px;
+    max-height: 24px;
+    float: left;
+}
+
+#amfile-list span
+{
+    margin-left: 29px;
+    display: block;
+}

@@ -1,0 +1,79 @@
+<?php
+/**
+ * MageWorkshop
+ * Copyright (C) 2012  MageWorkshop <mageworkshophq@gmail.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * @category   MageWorkshop
+ * @package    MageWorkshop_DetailedReview
+ * @copyright  Copyright (c) 2012 MageWorkshop Co. (http://mage-workshop.com)
+ * @license    http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPL-3.0)
+ * @author     MageWorkshop <mageworkshophq@gmail.com>
+ */
+
+$helper = Mage::helper('detailedreview');
+$urlJs = $helper->getDetailReviewJsUrl();
+$ie7fix = "<script type='text/javascript' src='".$urlJs."/ie7fix.js'><\/script>";
+if(Mage::getStoreConfig('detailedreview/settings/enable_jquery')) :
+    $easingSpy = false;
+    $jqui = true;
+    if (Mage::getStoreConfig('detailedreview/category_options/all_reviews') || Mage::getStoreConfig('detailedreview/category_options/category_reviews')) {
+        $easingSpy = true;
+    }
+    if (Mage::getStoreConfig('detailedreview/category_options/all_reviews')) {
+        $jqui = true;
+    }
+    if ($jqui && $easingSpy) {
+        $drjs = 'dr.full.min.js';
+    } elseif ($jqui) {
+        $drjs = 'dr.without.easing.spy.min.js';
+    } elseif ($easingSpy) {
+        $drjs = 'dr.without.jqui.min.js';
+    } else {
+        $drjs = 'dr.without.jqui.easing.spy.min.js';
+    }
+    $detailedreview = "<script type='text/javascript' src='$urlJs/$drjs'></script>";
+    ?>
+    <?php echo $detailedreview; ?>
+<?php else: ?>
+    <script type="text/javascript">
+        if(typeof jQuery === 'undefined' || !(/[1-9]\.[8-9].[0-9]/.test(jQuery.fn.jquery))){
+            alert("<?php echo $this->__("jQuery is not installed or version of included jQuery by some other plugin is lower then 1.8.x. Please enable jQuery in Detailed Review plugin settings."); ?>");
+        }
+    </script>
+<?php endif; ?>
+
+<?php if (Mage::getStoreConfig('detailedreview/captcha/enabled')): ?>
+    <?php if (Mage::getStoreConfig('detailedreview/settings/enable_jquery')): ?>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        if((DRjQuery.browser.msie && parseInt(DRjQuery.browser.version, 10) != 7) || !DRjQuery.browser.msie) {
+                    document.write("<script type='text/javascript' src='//www.google.com/recaptcha/api/js/recaptcha_ajax.js'><\/script>");
+        }
+        //]]>
+    </script>
+    <?php else: ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        if((DRjQuery.browser.msie && parseInt(jQuery.browser.version, 10) != 7) || !DRjQuery.browser.msie) {
+            document.write("<script type='text/javascript' src='//www.google.com/recaptcha/api/js/recaptcha_ajax.js'><\/script>");
+        }
+        //]]>
+    </script>
+    <?php endif; ?>
+<?php endif; ?>

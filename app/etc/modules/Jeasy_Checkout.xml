@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Jeasy_Checkout>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Jeasy_Checkout>
+    </modules>
+</config>

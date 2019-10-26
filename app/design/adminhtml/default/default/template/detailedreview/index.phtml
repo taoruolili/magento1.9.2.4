@@ -1,0 +1,103 @@
+<?php $chartType = Mage::getStoreConfig('detailedreview/statistics_options/chart_type'); ?>
+<?php if (is_array($this->getChild('diagrams')->getTabsIds())) : ?>
+<script type="text/javascript">
+//<![CDATA[
+currentMehthodCount = 0;
+function changeDiagramsPeriod(periodObj) {
+    periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
+<?php foreach ($this->getChild('diagrams')->getTabsIds() as $tabId): ?>
+    ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
+    ajaxBlockUrl = '<?php echo $this->getUrl('*/*/ajaxBlock', array('_current' => true, 'block' => '', 'period' => '')) ?>' + ajaxBlockParam + periodParam;
+    new Ajax.Request(ajaxBlockUrl, {
+        parameters: {isAjax: 'true', form_key: FORM_KEY},
+        onSuccess: function(transport) {
+            tabContentElementId = '<?php echo $this->getChild('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
+            try {
+                if (transport.responseText.isJSON()) {
+                    var response = transport.responseText.evalJSON();
+                    if (response.error) {
+                        alert(response.message);
+                    }
+                    if(response.ajaxExpired && response.ajaxRedirect) {
+                        setLocation(response.ajaxRedirect);
+                    }
+                } else {
+                    window.isFunctionUpdated = false;
+                    $(tabContentElementId).update(transport.responseText);
+                    <?php if ( $chartType && $chartType != 'mage' ): ?>
+                    (function callDrawChart() {
+                        if (isFunctionUpdated) {
+                            drawChart();
+                        } else {
+                            setTimeout(function() {
+                                callDrawChart();
+                            }, 1);
+                        }
+                    })();
+                    <?php endif; ?>
+                }
+            }
+            catch (e) {
+                $(tabContentElementId).update(transport.responseText);
+            }
+        }
+    });
+<?php endforeach; ?>
+}
+
+function toggleCal(id) {
+    $('dashboard_'+id+'_cal_div').toggle();
+    $('dashboard_'+id+'_range_div').toggle();
+}
+//]]>
+</script>
+<?php endif; ?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td><h3 class="head-dashboard"><?php echo $this->__('Reviews Statistics') ?></h3></td>
+        </tr>
+    </table>
+</div>
+<div class="dashboard-container">
+    <table cellspacing="25" width="100%">
+        <tr>
+            <td><?php echo $this->getChildHtml('sales') ?>
+                <div class="entry-edit">
+                    <div class="entry-edit-head"><h4><?php echo $this->__('%s Most Reviewed Products', Mage::getStoreConfig('detailedreview/statistics_options/qty_items_in_reviewed_grid') ) ?></h4></div>
+                    <fieldset class="np"><?php echo $this->getChildHtml('mostReviewedProducts'); ?></fieldset>
+                </div>
+                <div class="entry-edit">
+                    <div class="entry-edit-head"><h4><?php echo $this->__('%s Most Liked Products', Mage::getStoreConfig('detailedreview/statistics_options/qty_items_in_liked_grid') ) ?></h4></div>
+                    <fieldset class="np"><?php echo $this->getChildHtml('mostLikedProducts'); ?></fieldset>
+                </div>
+                <div class="entry-edit">
+                    <div class="entry-edit-head"><h4><?php echo $this->__('%s Most Disliked Products', Mage::getStoreConfig('detailedreview/statistics_options/qty_items_in_disliked_grid') ) ?></h4></div>
+                    <fieldset class="np"><?php echo $this->getChildHtml('mostDislikedProducts'); ?></fieldset>
+                </div>
+                <div class="entry-edit">
+                    <div class="entry-edit-head"><h4><?php echo $this->__('%s Most Active Customers', Mage::getStoreConfig('detailedreview/statistics_options/qty_items_in_customer_grid') ) ?></h4></div>
+                    <fieldset class="np"><?php echo $this->getChildHtml('mostActiveUsers'); ?></fieldset>
+                </div>
+            </td>
+            <td>
+                <div class="entry-edit" style="border:1px solid #ccc;">
+                    <?php echo $this->getChildHtml('diagrams') ?>
+                    <?php if (is_array($this->getChild('diagrams')->getTabsIds())) : ?>
+                        <div id="diagram_tab_content"></div>
+                    <?php endif; ?>
+                    <div style="margin:20px;">
+                        <?php echo $this->getChildHtml('totals') ?>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<?php if ( $chartType && $chartType != 'mage' ): ?>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+</script>
+<?php endif; ?>

@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <catalog>
+            <children>
+                <reviews_ratings>
+                    <children>
+                        <reviews>
+                            <children>
+                                <statistics translate="title" module="detailedreview">
+                                    <title>Reviews Statistics</title>
+                                    <action>detailedreviewadmin/adminhtml_statistics/index/</action>
+                                </statistics>
+                                <pros module="detailedreview">
+                                    <title>Pros</title>
+                                    <action>detailedreviewadmin/adminhtml_pros/index/</action>
+                                </pros>
+                                <cons module="detailedreview">
+                                    <title>Cons</title>
+                                    <action>detailedreviewadmin/adminhtml_cons/index/</action>
+                                </cons>
+                                <user_proscons module="detailedreview">
+                                    <title>User-defined Pros and Cons</title>
+                                    <action>detailedreviewadmin/adminhtml_userproscons/index/</action>
+                                </user_proscons>
+                            </children>
+                        </reviews>
+                    </children>
+                </reviews_ratings>
+            </children>
+         </catalog>
+    </menu>
+
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <catalog>
+                        <children>
+                            <reviews_ratings>
+                                <children>
+                                    <reviews translate="title">
+                                        <children>
+                                            <statistics translate="title">
+                                                <title>Reviews Statistics</title>
+                                            </statistics>
+                                            <pros translate="title">
+                                                <title>Pros</title>
+                                            </pros>
+                                            <cons translate="title">
+                                                <title>Cons</title>
+                                            </cons>
+                                            <user_proscons translate="title">
+                                                <title>User-defined Pros and Cons</title>
+                                            </user_proscons>
+                                        </children>
+                                    </reviews>
+                                 </children>
+                            </reviews_ratings>
+                        </children>
+                    </catalog>
+
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <detailedreview translate="title">
+                                        <title>Detailed Review</title>
+                                        <sort_order>100</sort_order>
+                                    </detailedreview>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

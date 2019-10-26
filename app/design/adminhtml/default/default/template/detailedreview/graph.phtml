@@ -1,0 +1,56 @@
+<?php $chartType = Mage::getStoreConfig('detailedreview/statistics_options/chart_type'); ?>
+<?php if ($chartType && $chartType != 'mage'): ?>
+    <?php $this->setWidth(200 + $this->getWidth())?>
+<?php endif; ?>
+<div style="margin:20px;">
+    <p class="switcher a-right" style="padding:5px 10px;"><?php echo $this->__('Select Range') ?>:
+        <select name="period" id="order_<?php echo $this->getHtmlId() ?>_period" onchange="changeDiagramsPeriod(this);">
+            <?php foreach ($this->helper('adminhtml/dashboard_data')->getDatePeriods() as $_value=>$_label): ?>
+                <?php if(in_array($_value, array('custom'))) continue; ?>
+                <option value="<?php echo $_value ?>" <?php if($this->getRequest()->getParam('period')==$_value): ?> selected="selected"<?php endif; ?>><?php echo $_label ?></option>
+            <?php endforeach; ?>
+        </select>
+    </p><br/>
+    <?php $_containerStyle = "width:{$this->getWidth()}px;height:{$this->getHeight()}px; margin:0 auto;"; ?>
+    <?php if($this->getCount()): ?>
+        <?php if (!$chartType || $chartType == 'mage'): ?>
+            <p style="<?php echo $_containerStyle; ?>">
+                <img src="<?php echo $this->getChartUrl(false) ?>" alt="chart" title="chart" />
+            </p>
+        <?php else: ?>
+            <div style="<?php echo $_containerStyle; ?>">
+                <div id="chart_div"></div>
+            </div>
+            <script type="text/javascript">
+                window['drawChart'] = function () {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Date');
+                    data.addColumn('number', 'Activity');
+                    var dataRows = [
+                        <?php foreach($this->getDataForRows() as $row ):?>
+                        ['<?php echo $row['date'] ?>', <?php echo $row['data'] ?>],
+                        <?php endforeach; ?>
+                    ];
+                    data.addRows(dataRows);
+
+                    var chart = new google.visualization.<?php echo $chartType ?>Chart(document.getElementById('chart_div'));
+                    chart.draw(
+                        data,
+                        {
+                            width: <?php echo $this->getWidth() ?>,
+                            height: <?php echo $this->getHeight() ?>, title: 'Reviews Activity',
+                            hAxis: {title: 'Date', titleTextStyle: {color: '#FF0000'}}
+                        }
+                    );
+                };
+                window.isFunctionUpdated = true;
+            </script>
+        <?php endif; ?>
+    <?php else: ?>
+    <p class="a-center" style="<?php echo $_containerStyle?>"><?php echo $this->__('No Data Found') ?></p>
+    <script type="text/javascript">
+        window['drawChart'] = function () {};
+        window.isFunctionUpdated = true;
+    </script>
+    <?php endif; ?>
+</div>

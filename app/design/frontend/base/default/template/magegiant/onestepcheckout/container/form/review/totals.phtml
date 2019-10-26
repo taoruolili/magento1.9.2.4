@@ -1,0 +1,50 @@
+<?php
+/**
+* Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?>
+<?php if ($this->getTotals()): ?>
+    <tfoot>
+	<?php $_colspan = 2; ?>
+	<tr class="empty-row">
+        <td colspan="2">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td class="hidden-col-remove">&nbsp;</td>
+    </tr>
+    
+    <?php echo $this->renderTotals(null, $_colspan); ?>
+    <?php echo $this->renderTotals('footer', $_colspan); ?>
+    <?php if ($this->needDisplayBaseGrandtotal()):?>
+        <tr>
+            <td class="a-right" colspan="<?php echo $_colspan; ?>">
+                <small><?php echo $this->helper('sales')->__('Your credit card will be charged for') ?></small>
+            </td>
+            <td class="a-right">
+                <small><?php echo $this->displayBaseGrandtotal() ?></small>
+            </td>
+			<td class="hidden-col-remove">&nbsp;</td>
+        </tr>
+    <?php endif?>
+	<tr class="empty-row">
+        <td colspan="2">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td class="hidden-col-remove">&nbsp;</td>
+    </tr>
+    </tfoot>
+<?php endif; ?>

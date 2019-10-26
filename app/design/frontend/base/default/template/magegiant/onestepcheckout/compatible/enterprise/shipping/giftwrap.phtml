@@ -1,0 +1,12 @@
+<?php
+?>
+<script type="text/javascript">
+    var giantOSCEnterpriseGiftWrap = new MagegiantOneStepCheckoutEnterpriseGiftwrap({
+        addGiftOptionsContainer: "#allow-gift-options-container",
+        addGiftOrderSelect: ".options-order-container select",
+        addGiftOrderItemSelect: ".options-items-container select",
+        addGiftOptionsCheckbox: ".gift-message-form input.checkbox",
+        addGiftOptionsUrl: '<?php echo $this->getSaveEnterpriseGiftwrapUrl();?>',
+        actionPattern: <?php echo $this->getActionEEPattern()?>
+    });
+</script>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2010-2013 Amasty (http://www.amasty.com)
+*/
+-->
+<config>
+<modules>
+<Amasty_File>
+<active>true</active>
+<codePool>local</codePool>
+</Amasty_File>
+</modules>
+</config> 

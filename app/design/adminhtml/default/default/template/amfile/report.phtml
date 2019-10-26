@@ -1,0 +1,18 @@
+<div class="entry-edit">
+  <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">Product Files Download Report</h4>
+    </div>
+        <div class="grid">
+        <div class="hor-scroll" id="product_files">
+       
+           <table class="form-list file-form data"  style="max-width:600px;borber:1px;" cellspacing="0" >
+               <thead><th>File Url</th><th>File Name</th><th>Product Id</th><th>Rating</th></thead>
+<?php 
+foreach ($this->getReport() as $report){
+    echo "<tr>";
+    echo "<td><b>".$report["file_url"]."</b></td><td>".$report["file_name"]."</td><td>".$report["product_id"]."</td><td>".$report["rating"]." times<br></td>";
+    echo "</tr>";
+}
+?>
+ </table>
+        </div></div></div>

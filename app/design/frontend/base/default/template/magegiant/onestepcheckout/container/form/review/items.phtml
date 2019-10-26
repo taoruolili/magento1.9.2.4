@@ -1,0 +1,56 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?>
+<div id="one-step-checkout-review-items">
+    <div id="one-step-checkout-review-items-table">
+        <?php echo $this->getHelperTimerBlockHtml(); ?>
+        <table class="one-step-checkout-cart-table">
+            <col/>
+            <col width="1"/>
+            <col width="1"/>
+            <thead>
+            <tr>
+                <th class="name a-center" style="width:70%;"><?php echo $this->__('Product Name') ?></th>
+                <th class="a-center qty" style="width:16%;"><?php echo $this->__('Qty') ?></th>
+                <th class="total" style="width:30%"><?php echo $this->__('Subtotal') ?></th>
+                <th class="hidden-col-remove">&nbsp;</th>
+            </tr>
+            </thead>
+            <?php echo $this->getChildHtml('totals'); ?>
+            <tbody>
+            <?php foreach ($this->getItems() as $_item): ?>
+                <?php echo $this->getItemHtml($_item) ?>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    //<![CDATA[
+    giantOSCReviewCart = new MagegiantOnestepcheckoutReviewCart({
+        removeProductLinks: '#one-step-checkout-review-items a.remove',
+        removeProductConfirmMessage: '<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?');?>',
+        plusProductLinks: '#one-step-checkout-review-items a.plus',
+        minusProductLinks: '#one-step-checkout-review-items a.minus',
+        ajaxCartItemUrl: '<?php echo $this->getAjaxCartItemUrl()?>'
+    });
+    //]]>
+</script>

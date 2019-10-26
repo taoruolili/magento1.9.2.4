@@ -1,0 +1,54 @@
+<tr>
+    <td class="label"><label for="<?php echo $element->getHtmlId(); ?>">Image <br>(Must be in PNG, GIF or JPEG format)</label></td>
+<?php $images = explode(',',$element->getEscapedValue());?>
+    <td class="value" id="add-file-input-box">
+        <ul>
+            <?php $count = 0; ?>
+            <?php foreach ($images as $image) :?>
+                <?php if (!empty($image)): ?>
+                    <?php $count++; ?>
+                <li>
+                    <a href="<?php echo $url = (Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)).$image; ?>" onclick="imagePreview('image[]'); return false;">
+                    <img src="<?php echo $url = (Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)).$image; ?>" id="image[]" title="" alt="" height="22" width="22" class="small-image-preview v-middle"></a>
+                    <input id="<?php echo $element->getHtmlId(); ?>" name="<?php echo $element->getName(); ?>[]" value="<?php echo $image; ?>" <?php echo $element->serialize($element->getHtmlAttributes()); ?> />
+                    <a href="#" class="remove-img">Remove</a>
+                </li>
+                <?php endif ?>
+            <?php endforeach?>
+        </ul>
+        <span class="more-images"><a href="#" id="add-more-images">Add More Files</a></span>
+    </td>
+</tr>
+<script type="text/javascript">
+    //<![CDATA[
+    (function ($) {
+        $.noConflict();
+        <?php
+            if (!($imagesMaxCount = (int)Mage::getStoreConfig('detailedreview/image_options/images_max_count'))) {
+                $imagesMaxCount = 1;
+            }
+        ?>
+        var MaxFileInputs = <?php echo $imagesMaxCount; ?>;
+        var i = <?php echo $count ?>;
+        $("#add-more-images").live("click",function () {
+           // event.returnValue = false;
+            if(i < MaxFileInputs)
+            {
+                var element = '<li><input id="image" type="file" name="image[]"/><a href="#" class="remove-img">Remove</a></li>';
+                $(element).appendTo($('#add-file-input-box ul'));
+                i++;
+            } else {
+                $("#add-more-images").css('display','none');
+                alert('You can upload not more than '+ (MaxFileInputs) + ' images')
+            };
+            return false;
+        });
+        $(".remove-img").live("click",function () {
+            $(this).parents('li').remove();
+            $("#add-more-images").css('display','block');
+            i--;
+            return false;
+        });
+    })(DRjQuery);
+    //]]>
+</script>

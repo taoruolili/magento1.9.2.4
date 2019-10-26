@@ -1,0 +1,64 @@
+There was an error occurred during paying process.,エラーが発生し、プロセスを払って中に発生しました !
+
+"Payment Result","支払結果 "
+"Failure reason","失敗の理由 " 
+"Transaction failure","失敗の支払い !"
+"Payment exception","支払例外、解決するためのショッピング所有者に連絡してください !"
+"Payment is failure, the data validation failed","データ検証に失敗、それを解決するために、ショッピングの所有者に連絡してください !"
+"Your order payment is failure","ご注文の支払いが失敗で、再びお支払い下さい !"
+"Thank you for your purchase","お支払いは、ご購入をお願い致します、成功する !"
+"Your order payment is processing","、、オーダーが処理している瞬間を待って、後でもう一度払っていない !"
+"Your order has been succeed","ご注文は成功した !"
+"You will receive an order confirmation email with details of your order and a link to track its progress","あなたは、ご注文の詳細とその進捗状況を追跡するためのリンクを使用して、注文確認のメールが届きます !"
+"Your Order No","注文なし"
+"Continue Checkout","支払いを継続"
+"Continue Shopping","ショッピングを続ける"
+
+
+
+Bank,Bank
+Credit Mutuel,Credit Mutuel
+Customer returned from NewOrder creditcard.,Customer returned from NewOrder creditcard.
+Customer successfully returned from NewOrder creditcard,Customer successfully returned from NewOrder creditcard
+Customer was redirected to NewOrder creditcard,Customer was redirected to NewOrder creditcard
+CosmoCommerce creditcard Payment," ""NewOrder Creditcard Payment"""
+Service Type,Service Type
+Default NewOrder creditcard Interface language,Default NewOrder creditcard Interface language
+Dutch,Dutch
+Enabled,Enabled
+English,English
+Error occured,Error occured
+French,French
+German,German
+Groupe CIC,Groupe CIC
+Italian,Italian
+Key,Key
+Merchant No.,Merchant No.
+SignKey Code,Gateway corresponding key
+Transport URL,Transaction gateway submitted address
+New order status,New order status
+OBC,OBC
+Order %s,Order %s
+Order number will be used if left empty,Order number will be used if left empty
+Order status when payment accepted by NewOrder creditcard," ""Order status when payment accepted by NewOrder creditcard"""
+Order status when payment refused by NewOrder creditcard," ""Order status when payment refused by NewOrder creditcard"""
+Payment accepted by NewOrder creditcard," ""Payment accepted by NewOrder creditcard"""
+Payment from Specific countries,Payment from Specific countries
+Payment from applicable countries,Payment from applicable countries
+Payment refused by NewOrder creditcard," ""Payment refused by NewOrder creditcard"""
+Preference will be given to store language chosen by the user," ""Preference will be given to store language chosen by the user"""
+Returned MAC is invalid. Order cancelled.,Returned MAC is invalid. Order cancelled.
+SHA key,SHA key
+Site code,Site code
+Sort order,Sort order
+Spain,Spain
+TPE number,TPE number
+Test mode,Test mode
+There was an error occurred during paying process.,There was an error occurred during paying process.
+Title,Title
+Transaction Description,Transaction Description
+You will be redirected to NewOrder creditcard in a few seconds.,You will be redirected to NewOrder creditcard in a few seconds.
+You will be redirected to NewOrder creditcard website when you place an order.,You will be redirected to NewOrder creditcard website when you place an order.
+Products,Products
+Virtual Products,Virtual Products
+Virtual Products2,Virtual Products2

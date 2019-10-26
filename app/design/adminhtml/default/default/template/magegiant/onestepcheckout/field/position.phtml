@@ -1,0 +1,201 @@
+<?php
+/**
+ * MageGiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @copyright   Copyright (c) 2014 Magegiant (http://magegiant.com/)
+ * @license     http://magegiant.com/license-agreement.html
+ */
+?>
+<style>
+    .onestep-title {
+        background-color: <?php echo Mage::helper('onestepcheckout/config')->getStyleColor()?>
+    }
+
+    .onestep-title h2 {
+        color: <?php echo Mage::helper('onestepcheckout/config')->getHeadingTextColor()?Mage::helper('onestepcheckout/config')->getHeadingTextColor():'#fff'?>
+    }
+</style>
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody>
+        <tr>
+            <td><h3 class="head-dashboard"><?php echo $this->__('Manage Billing Fields') ?></h3></td>
+            <td class="form-buttons">
+                <button id="add_new_segmet" title="<?php echo $this->__('Add new segment') ?>" type="button"
+                        class="scalable save"
+                        onclick="savePosition();"
+                        style="">
+                    <span><?php echo $this->__('Save position') ?></span>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="field-postion-content">
+    <div id="giant-osc-fields-container">
+        <div id="giant-messages" style="display: none">
+            <ul class="messages">
+                <li class="success-msg">
+                    <ul>
+                        <li><span><?php echo $this->__('All fields have been saved.') ?></span></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <?php
+        $_billingFields = $this->getBillingFields();
+        $_availableFields = $this->getAvailableFields();
+        $_helper = Mage::helper('onestepcheckout');
+        ?>
+        <div class="giant-osc-fields-wrapper">
+            <div class="giant-osc-fields-header">
+                <div class="description">
+                    <!-- <p>
+                        <?php /*echo $this->__('Drap and drop fields from Left to Right to enable fields') */ ?>
+                    </p>
+                    <p>
+                        <?php /*echo $this->__('Drap and drop fields from Right to Left to disable fields') */ ?>
+                    </p>
+                    <p>
+                        <?php /*echo $this->__('Drap and drop fields in Right to sort fields') */ ?>
+                    </p>-->
+                </div>
+            </div>
+            <div class="giant-osc-fields-content">
+
+                <div id="giant-osc-fields-sortable">
+
+                    <div id="containment">
+
+                        <div class="column left first">
+                            <div class="field-wrapper available-wrapper">
+                                <div class="onestep-title available">
+                                    <h2><?php echo $this->__('AVAILABLE FIELDS') ?></h2>
+                                </div>
+                                <div class="field field-available">
+                                    <ul class="sortable-list ui-sortable">
+                                        <?php foreach ($_availableFields as $field): ?>
+                                            <li class="sortable-item"
+                                                entity_type_id="<?php echo $field->getEntityTypeId() ?>"
+                                                attribute_code="<?php echo $field->getAttributeCode() ?>">
+                                                <div class="attribute-label">
+                                                    <?php echo $_helper->getAttributeFrontendLabel($field->getAttributeCode(), $field->getEntityTypeId()) ?>
+                                                </div>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column right">
+                            <div class="field-wrapper billing-wrapper">
+                                <div class="onestep-title billing-title">
+                                    <h2><?php echo $this->__('BILLING ADDRESS') ?></h2>
+                                </div>
+                                <div class="field billing-field">
+                                    <ul class="sortable-list ui-sortable billing-address">
+                                        <?php foreach ($_billingFields as $field): ?>
+                                            <li class="sortable-item <?php echo $field->getColspan() == 2 ? 'wide' : '' ?>"
+                                                entity_type_id="<?php echo $field->getEntityTypeId() ?>"
+                                                attribute_code="<?php echo $field->getAttributeCode() ?>">
+                                                <div class="attribute-label">
+                                                    <?php echo $_helper->getAttributeFrontendLabel($field->getAttributeCode(), $field->getEntityTypeId()) ?>
+                                                </div>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearer">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //<![CDATA[
+        jQ(function () {
+            jQ('#giant-osc-fields-sortable .sortable-list').sortable({
+                connectWith: '#giant-osc-fields-sortable .sortable-list',
+                containment: '#containment',
+                sort: function (e) {
+                    var parent = jQ(e).parent();
+                    if (!parent.hasClass('billing-address')) {
+                        jQ(e).css({
+                            width: '',
+                        });
+                        return;
+                    }
+                },
+                placeholder: "suggest-position"
+
+            });
+            jQ("#giant-osc-fields-sortable .sortable-list").disableSelection();
+            /*Resize able*/
+            jQ("#containment ul li .attribute-label").resizable({
+                maxHeight: 40,
+                minHeight: 40,
+                helper: "ui-resizable-border",
+                stop: function (e, ui) {
+                    var parent = ui.element.parent();
+                    var parrent_width = parent.width();
+                    var ui_width = ui.element.width();
+                    var ratio = ui_width / parrent_width * 100;
+                    ui.element.css({
+                        width: '',
+                    });
+                    if (ratio > 50) {
+                        parent.addClass('wide');
+                    }
+                    else {
+                        parent.removeClass('wide');
+                    }
+
+                }
+            });
+        });
+        function savePosition() {
+            var billing_fields = new Array();
+            var available_fields = new Array();
+            var url = '<?php echo $this->getUrl('*/*/save',array('_secure' => true))?>'
+            jQ('.right .sortable-item').each(function (index, el) {
+                var entity_type_id = jQ(el).attr('entity_type_id');
+                var attribute_code = jQ(el).attr('attribute_code');
+                var colspan = jQ(el).hasClass('wide') ? 2 : 1;
+                billing_fields[index] = new Array(entity_type_id, attribute_code, colspan);
+            });
+            jQ('.left .sortable-item').each(function (index, el) {
+                var entity_type_id = jQ(el).attr('entity_type_id');
+                var attribute_code = jQ(el).attr('attribute_code');
+                var colspan = jQ(el).hasClass('wide') ? 2 : 1;
+                available_fields[index] = new Array(entity_type_id, attribute_code, colspan);
+            });
+            var billing_fields_json = JSON.stringify(billing_fields);
+            var available_fields_json = JSON.stringify(available_fields);
+            $('giant-messages').hide();
+            new Ajax.Request(url, {
+                method: 'post',
+                parameters: {
+                    billing_fields: billing_fields_json,
+                    available_fields: available_fields_json
+                },
+                onSuccess: function (response) {
+                    $('giant-messages').show();
+                }
+            });
+        }
+        //]]>
+    </script>

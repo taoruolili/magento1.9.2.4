@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Amasty_Imgupload>
+            <version>1.0.2</version>
+        </Amasty_Imgupload>
+    </modules>
+    
+    <admin>
+        <routers>
+            <amimgupload>
+                <use>admin</use>
+                <args>
+                    <module>Amasty_Imgupload</module>
+                    <frontName>amimgupload</frontName>
+                </args>
+            </amimgupload>
+        </routers>
+    </admin>
+    
+    <adminhtml>
+        <translate>
+            <modules>
+                <Amasty_Imgupload>
+                    <files>
+                        <default>Amasty_Imgupload.csv</default>
+                    </files>
+                </Amasty_Imgupload>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <amadvert module="Amasty_Imgupload">
+                    <file>amimgupload.xml</file>
+                </amadvert>
+            </updates>
+        </layout>
+    </adminhtml>
+    
+    <global>
+    
+        <models>
+            <amimgupload>
+                <class>Amasty_Imgupload_Model</class>
+                <resourceModel>amimgupload_mysql4</resourceModel>
+            </amimgupload>
+            <amimgupload_mysql4>
+                <class>Amasty_Imgupload_Model_Mysql4</class>
+            </amimgupload_mysql4>
+            
+        </models>
+        
+		<resources>
+             <amimgupload_setup>
+                <setup>
+                    <module>Amasty_Imgupload</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </amimgupload_setup>
+		    <amimgupload_write>
+		        <connection><use>core_write</use></connection>
+		    </amimgupload_write>
+		    <amimgupload_read>
+		        <connection><use>core_read</use></connection>
+		    </amimgupload_read>
+		</resources>
+		  
+        <blocks>
+            <amimgupload>
+                <class>Amasty_Imgupload_Block</class>
+            </amimgupload>
+        </blocks>
+        
+        <helpers>
+            <amimgupload>
+                <class>Amasty_Imgupload_Helper</class>
+            </amimgupload>
+        </helpers>
+        
+        <events>
+            <catalog_product_prepare_save>
+                <observers>
+                    <amimgupload>
+                        <type>singleton</type>
+                        <class>amimgupload/observer</class>
+                        <method>onCatalogProductPrepareSave</method>
+                    </amimgupload>
+                </observers>
+            </catalog_product_prepare_save><!-- test -->
+        </events>
+    </global>
+    
+    <default>
+        <amimgupload>
+           <ui>
+                <handler>am_item</handler>
+           </ui>
+        </amimgupload>
+    </default>
+    
+</config>

@@ -1,0 +1,131 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?><?php if ($this->canShip()) : ?>
+    <div class="col-wrapper">
+        <?php $blockNumber = $this->getNumbering(); ?>
+        <?php if ($blockNumber): ?>
+            <div class="onestep-title-number">
+                <h2>
+                    <span class="one-step-checkout-number"><?php echo $blockNumber . '. '; ?></span>
+                    <?php echo $this->__('SHIPPING METHOD'); ?></h2>
+            </div>
+        <?php else: ?>
+            <div class="onestep-title billing-title">
+                <h2><?php echo $this->__('SHIPPING METHOD'); ?></h2>
+            </div>
+        <?php endif; ?>
+        <div id="one-step-checkout-shipping-method" >
+            <?php $_shippingRateGroups = $this->getShippingRates(); ?>
+            <?php if (!$_shippingRateGroups) : ?>
+                <p><?php echo $this->__('Please specify the shipping address to see available options.') ?></p>
+            <?php else : ?>
+                <dl class="sp-methods">
+                    <?php if (!is_null($this->getAddressShippingMethod()) && $this->getAddressShippingMethod() == 'collectinstore_collectinstore' && $this->getUseForShipping() == 2): ?>
+                        <?php $_rate = $this->getAddress()->getShippingRateByCode('collectinstore_collectinstore'); ?>
+                        <dt><?php echo $this->escapeHtml($this->getCarrierName('collectinstore')) ?></dt>
+                        <dd>
+                            <ul>
+                                <li>
+                                     <span class="no-display"><input name="shipping_method" type="radio"
+                                                                     value="<?php echo $_rate->getCode() ?>"
+                                                                     id="s_method_<?php echo $_rate->getCode() ?>"
+                                                                     checked="checked"/></span>
+                                    <label
+                                        for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
+                                        <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                                        <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+                                        <?php echo $_excl; ?>
+                                        <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                            (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                                        <?php endif; ?>
+                                    </label>
+                                </li>
+                            </ul>
+                        </dd>
+                    <?php else: ?>
+                        <?php $_sole = count($_shippingRateGroups) == 1;
+                        foreach ($_shippingRateGroups as $code => $_rates): ?>
+                            <?php if ($code == 'collectinstore') continue; ?>
+                            <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
+                            <dd>
+                                <ul>
+                                    <?php $_sole = $_sole && count($_rates) == 1;
+                                    foreach ($_rates as $_rate): ?>
+                                        <li>
+                                            <?php if ($_rate->getErrorMessage()): ?>
+                                                <ul class="messages">
+                                                    <li class="error-msg">
+                                                        <ul>
+                                                            <li><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            <?php else: ?>
+                                                <?php if ($_sole) : ?>
+                                                    <span class="no-display"><input name="shipping_method" type="radio"
+                                                                                    value="<?php echo $_rate->getCode() ?>"
+                                                                                    id="s_method_<?php echo $_rate->getCode() ?>"
+                                                                                    checked="checked"/></span>
+                                                <?php else: ?>
+                                                    <input name="shipping_method" type="radio"
+                                                           value="<?php echo $_rate->getCode() ?>"
+                                                           id="s_method_<?php echo $_rate->getCode() ?>"<?php if ($_rate->getCode() === $this->getAddressShippingMethod()) echo ' checked="checked"' ?>
+                                                           class="radio s_method"/>
+                                                <?php endif; ?>
+                                                <label
+                                                    for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
+                                                    <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                                                    <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+                                                    <?php echo $_excl; ?>
+                                                    <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                                        (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                                                    <?php endif; ?>
+                                                </label>
+                                            <?php endif ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </dd>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </dl>
+                <div class="validation-advice" style="display: none;"></div>
+            <?php endif; ?>
+            <script type="text/javascript">
+                window.giantOSCShipment = new MagegiantOnestepcheckoutShipment({
+                    containerSelector: "#one-step-checkout-shipping-method",
+                    switchMethodInputsSelector: "input[type='radio'][name='shipping_method']",
+                    saveShipmentUrl: <?php echo Zend_Json::encode($this->getSaveShippingMethodUrl());?>
+                });
+                <?php if($this->isEnabledStorePickup()): ?>
+                giantOSCShipmentStorePickup = new MagegiantOnestepcheckoutShipmentStorePickup({
+                    containerSelector: "#magegiant-storepickup",
+                    shipmentCheckbox: ".s_method",
+                });
+                var url_disable_date = '<?php echo $this->getUrl('storepickup/index/disableDate',array('_secure' => true)); ?>';
+                var date_format = '<?php echo Mage::helper('storepickup')->getDateFormat() ?>';
+                <?php endif?>
+            </script>
+        </div>
+    </div>
+    <?php echo $this->getEnterpriseGiftWrappingHtml(); ?>
+    <?php echo $this->getChildHtml('extra'); ?>
+<?php endif; ?>

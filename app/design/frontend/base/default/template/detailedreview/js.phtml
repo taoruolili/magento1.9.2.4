@@ -1,0 +1,419 @@
+<?php
+/**
+ * MageWorkshop
+ * Copyright (C) 2012  MageWorkshop <mageworkshophq@gmail.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * @category   MageWorkshop
+ * @package    MageWorkshop_DetailedReview
+ * @copyright  Copyright (c) 2012 MageWorkshop Co. (http://mage-workshop.com)
+ * @license    http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPL-3.0)
+ * @author     MageWorkshop <mageworkshophq@gmail.com>
+ */
+
+$isCustomerLogged = $this->helper('customer')->isLoggedIn(); ?>
+<?php $isGuestAllowToWrite = $this->helper('review')->getIsGuestAllowToWrite(); ?>
+<?php $isGuestAllowToVote = Mage::getStoreConfig('detailedreview/settings/allow_guest_vote'); ?>
+<?php $reviewAjaxSubmit = Mage::getStoreConfig('detailedreview/settings/submit_review_ajax'); ?>
+<?php
+$public_key = Mage::getStoreConfig('detailedreview/captcha/public_key');
+if (!($imagesMaxCount = (int)Mage::getStoreConfig('detailedreview/image_options/images_max_count'))) {
+    $imagesMaxCount = 1;
+}
+?>
+<script type="text/javascript">
+    //<![CDATA[
+    document.observe("dom:loaded", function() {
+        (function ($) {
+            $.noConflict();
+//        jQuery(document).ready() is fired too early in IE 9
+//        document.observe('dom:loaded', function () {
+//            var $ = DRjQuery;
+
+            $("#imageLoading").ajaxStart(function() {
+                $(this).show();
+            });
+
+            $("#imageLoading").ajaxStop(function() {
+                $(this).hide();
+            });
+
+            var $reviewBlock = $('.reviews-wrapper');
+            var $reviewPlaceholder = $('.reviews-placeholder');
+            var $reviewEasytab = $('#product_tabs_review_tabbed_contents');
+            var MaxFileInputs = <?php echo $imagesMaxCount; ?>;
+            var i = 1;
+            $("#add-more-images").live("click",function () {
+                if(i < MaxFileInputs)
+                {
+                    var html = $('<div/>').html('&lt;div class="more-images">&lt;span>&lt;input type="file" name="image[]" id="image_field" class="addedInput" value="" />&lt;a href="#" class="remove-img">Remove&lt;/a>&lt;/span>&lt;/div>').text();
+                    $('#add-file-input-box').append(html);
+                    i++;
+                } else {
+                        $("#add-more-images").css('display','none');
+                        alert('You can upload not more than '+ (MaxFileInputs) + ' images');
+                }
+                return false;
+            });
+            $(".remove-img").live("click", function () {
+                if( i > 0 ) {
+                    $(this).parents('span').remove();
+                    $("#add-more-images").css('display','block');
+                    i--;
+                }
+                if (MaxFileInputs == 1) {
+                    var html = $('<div/>').html('&lt;div class="more-images">&lt;span>&lt;input type="file" name="image[]" id="image_field" class="addedInput" value="" />&lt;a href="#" class="remove-img">Remove&lt;/a>&lt;/span>&lt;/div>').text();
+                    $('#add-file-input-box').append(html);
+                }
+                return false;
+            });
+
+            if ($reviewPlaceholder.length) {
+                if ($('#product_tabs_review_tabbed_contents #review-form').length != 0) {
+                    alert('Please, disable "product\'s review tab" in "EasyTab" extension options if you want "Detailed Review" extension to work correctly with custom reviews block placeholder.');
+                }
+                $reviewPlaceholder.html($$('.reviews-wrapper').clone(true));
+            } else if ($reviewEasytab.length) {
+                $reviewEasytab.html($$('.reviews-wrapper').clone(true));
+            }
+
+            if (decodeURI((RegExp('feedback=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]) != 'null') {
+                if (!$reviewPlaceholder.length && $reviewEasytab.length) {
+                    $('.product-view .product-collateral ul.tabs li').each(function (index, el) {
+                        var $contents = $('#' + el.id+'_contents');
+                        if (this.id == 'product_tabs_review_tabbed') {
+                            $(this).addClass('active');
+                            $contents.show();
+                        } else {
+                            $(this).removeClass('active');
+                            $contents.hide();
+                        }
+                    });
+                    Varien.Tabs.prototype.initTab($('ul.tabs li#product_tabs_review_tabbed a').get(0));
+                }
+                window.scrollTo(0, $('#feedback').offset().top);
+            }
+
+        <?php if ($isGuestAllowToWrite || $isCustomerLogged): ?>
+            var initDialog = function() {
+                <?php if (Mage::getStoreConfig('detailedreview/settings/review_form_popup')): ?>
+                    return $(".review-dialog-block").dialog({
+                        width: 585,
+                        minHeight: 460,
+                        position: "center",
+                        autoOpen: false,
+                        show: "fade",
+                        draggable: false,
+                        resizable: false,
+                        modal: true,
+                        stack: false,
+                        dialogClass: "review-dialog-modal",
+                        open: function () {
+                            $('.ui-widget-overlay').bind('click', function () {
+                                $('.review-dialog-block').dialog('close');
+                            })
+                        }
+                    });
+                <?php else: ?>
+                    var reviewForm = $(".review-dialog-block").addClass('non-popup').insertBefore(".review-top");
+                    $('.minimize').bind('click', function () {
+                        formDisplaying(reviewForm, 'close');
+                    });
+                    return  reviewForm;
+                <?php endif; ?>
+            };
+            var reviewDialog = initDialog();
+
+         <?php if (Mage_Review_Model_Review::STATUS_APPROVED) ?>
+            $('#review-form').live("submit", function(event){
+                var button = $('#review-form button.button').get(0);
+                var spinner = document.getElementById('review-add-spinner');
+//                button.style.display = 'none';
+//                spinner.style.display = '';
+
+            <?php if (Mage::getStoreConfig('detailedreview/captcha/enabled')): ?>
+                var flag = false;
+                var captchaError = $('.captcha-error');
+                var test = $.ajax({
+                    url:'<?php echo $this->getUrl('detailedreview/product/checkCaptcha'); ?>',
+                    data:this.serialize(),
+                    async:false,
+                    success:function (data) {
+                        if (data == 'invalid') {
+                            captchaError.html('<?php echo $this->__('You have entered wrong captcha.'); ?>');
+                            Recaptcha.reload();
+                            button.style.display = '';
+                            spinner.style.display = 'none';
+                        } else {
+                            captchaError.html('');
+                        }
+                    },
+                    error:function(){
+                        captchaError.html('<?php echo $this->__('Some error has been occurred '); ?>')
+                        button.style.display = '';
+                        spinner.style.display = 'none';
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+                if (captchaError.html() !== '') {
+                    return false;
+                }
+                if (dataForm.validator.validate() == true){
+                    $('#review-form .buttons-set button.button:submit').attr('disabled','disabled');
+                } else {
+                    button.style.display = '';
+                    spinner.style.display = 'none';
+                }
+            <?php endif; ?>
+
+            if (dataForm.validator.validate() == true){
+                $('#review-form .buttons-set button.button:submit').attr('disabled','disabled');
+                <?php if ( $reviewAjaxSubmit ): ?>
+                    $('#review-form').ajaxSubmit({
+                        target:"#upload-img",
+                        type: 'POST',
+                        dataType: "json",
+                        url: $('#review-form').attr('action'),
+                        success:function (response) {
+                            var dialogClass = 'error';
+                            var reviewDialog = initDialog();
+                            if(response.success) {
+                                dataForm.form.reset();
+                                formDisplaying(reviewDialog, 'close');
+                                $('#review-form .buttons-set button.button:submit').removeAttr('disabled');
+                                dialogClass = 'success';
+                                i = 1;
+                            }
+                            formDisplaying(reviewDialog, 'destroy');
+                            $('.review-dialog-submit-result').html(response.messages.replace(/\[\[/g, '<')).dialog({
+                                dialogClass: dialogClass
+                            });
+                            $('.review-dialog-submit-result').delay(3000).fadeOut(function(){$(this).dialog("close")});
+
+                            if (response.html) {
+                                var html = response.html.replace(/\[\[/g, '<');
+                                $('.reviews-container').html(html);
+                                <?php if (Mage::getStoreConfig('detailedreview/captcha/enabled')): ?>
+                                    Recaptcha.create("<?php echo $public_key; ?>",
+                                        "review-captcha",
+                                        {
+                                            theme: "clean",
+                                            callback: Recaptcha.focus_response_field
+                                        }
+                                    );
+                                    if (typeof Recaptcha != 'undefined' ) {
+                                        Recaptcha.reload();
+                                    }
+                                <?php endif; ?>
+                            }
+                        }
+
+
+                    });
+                <?php else: ?>
+                    formDisplaying(reviewDialog, 'close');
+                    $('#review-form .buttons-set button.button:submit').removeAttr('disabled');
+                    dialogClass = 'success';
+                    window.location.reload();
+                    return true;
+                <?php endif; ?>
+
+
+            } else {
+                button.style.display = '';
+                spinner.style.display = 'none';
+                if (typeof(Recaptcha) !== 'undefined'){
+                    Recaptcha.reload();
+                    return false;
+                }
+                event.preventDefault();
+                return false;
+            }
+            event.preventDefault();
+            return false;
+        });
+
+        <?php endif; ?>
+
+        $('.review-dialog').live("click",function () {
+            <?php if (!$isCustomerLogged && !$isGuestAllowToWrite): ?>
+                $('form [name=referer]').val($(this).prev().val());
+                $('form [name=success_url]').val($(this).prev().prev().val());
+                loginDialog.dialog('open');
+            <?php else: ?>
+                var reviewDialog = initDialog();
+                formDisplaying(reviewDialog, 'open');
+            <?php endif; ?>
+        });
+        <?php $showPopup = $this->getRequest()->getParam('show_popup'); ?>
+        <?php if ($isCustomerLogged && (isset($showPopup) && ($showPopup == '1'))): ?>
+            setTimeout(function () {
+                formDisplaying(reviewDialog, 'open');
+            }, 1);
+        <?php endif; ?>
+        <?php if (!$isCustomerLogged || !$isGuestAllowToVote): ?>
+            loginDialog = $(".login-dialog-block").dialog({
+                width:760,
+                autoOpen:false,
+                show:"fade",
+                draggable:false,
+                resizable:false,
+                modal:true,
+                stack:false,
+                open:function () {
+                    $('.ui-widget-overlay').bind('click', function () {
+                        $('.login-dialog-block').dialog('close');
+                    })
+                }
+            });
+            loginDialog.dialog({zIndex:500});
+            dataLoginForm = new VarienForm('login-form', true);
+
+            $('#login-form').submit(function () {
+                if (dataLoginForm.validator && dataLoginForm.validator.validate()) {
+                    $.ajax({
+                        url:'<?php echo $this->getUrl('detailedreview/index/checklogin'); ?>',
+                        data:$(dataLoginForm.form).serialize(),
+                        success:function (data) {
+                            if (data === '1') {
+                                dataLoginForm.form.submit();
+                            } else {
+                                $('.account-login p.error-message').html(data);
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+            dataRegForm = new VarienForm('form-validate', true);
+            $('#form-validate').submit(function (event) {
+                if (dataRegForm.validator && dataRegForm.validator.validate()) {
+                    var $inputs = $('#form-validate :input');
+                    var values = {};
+                    $inputs.each(function() {
+                        values[this.name] = $(this).val();
+                    });
+                    $.ajax({
+                        url:'<?php echo $this->getUrl('detailedreview/index/checkregistrate'); ?>',
+                        data:values,
+                        success:function (data) {
+                            if (data === '1') {
+                                var redirectUrl = $(dataRegForm.form).find('[name="success_url"]').val();
+                                if (redirectUrl == window.location.href) {
+                                    window.location.reload();
+                                } else {
+                                    window.location.href = redirectUrl;
+                                }
+                            } else {
+                                var jsonObj = JSON.parse(data);
+                                if (typeof(jsonObj.success) !== 'undefined') {
+                                    var element = $('.account-create p.success-message');
+                                    element.html(jsonObj.success);
+                                    $('html, body').animate({
+                                        scrollTop: element.offset().top + 'px'
+                                    }, 'fast');
+                                } else if (typeof(jsonObj.error) !== 'undefined') {
+                                    var element = $('.account-create p.error-message');
+                                    element.html(jsonObj.error);
+                                    $('html, body').animate({
+                                        scrollTop: element.offset().top + 'px'
+                                    }, 'fast');
+                                }
+                            }
+                        }
+                    });
+                }
+                event.preventDefault();
+                return false;
+            });
+            <?php endif; ?>
+            $('.jqueryLightbox').lightBox({
+                imageLoading:'<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-ico-loading.gif'); ?>',
+                imageBtnPrev:'<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-btn-prev.gif'); ?>',
+                imageBtnNext:'<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-btn-next.gif'); ?>',
+                imageBtnClose:'<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-btn-close.gif'); ?>',
+                imageBlank:'<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-blank.gif'); ?>'
+            });
+            $(document).keyup(function (e) {
+                if (e.which == 27) {
+                    $("#jquery-lightbox").fadeOut("slow");
+                    $("#jquery-overlay").fadeOut("slow");
+                }
+            });
+            $('.review-vote-rating').live("click",function () {
+                that = $(this);
+                voteType = this.title,
+                    $.ajax({
+                        url: $('.helpful-form').attr('action'),
+                        data: {"is_helpful": voteType, "review_id": $(this).parent('div').children('input[name=review_id]').attr('value')},
+                        dataType: 'json',
+                        success: function(data) {
+                            if(data['msg']['type']=='success') {
+                                if(parseInt(voteType)) {
+                                    that.children('.helpful-qty').html(data['helpful']) ;
+                                } else {
+                                    that.children('.unhelpful-qty').html(data['unhelpful']);
+                                }
+                                $('#messages_product_view').html('<ul class="messages"><li class="success-msg"><ul><li><span>'+data['msg']['text']+'</span></li></ul></li></ul>');
+                            } else {
+                                $('#messages_product_view').html('<ul class="messages"><li class="error-msg"><ul><li><span>'+data['msg']['text']+'</span></li></ul></li></ul>');
+                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                            }
+                        },
+                        error: function(data) {
+                        }
+
+                    });
+            });
+
+            var formDisplaying = function(obj, action, options) {
+                var reviewFormOptions = {
+                    zIndex: 500
+                };
+                if (typeof options != "undefined") {
+                    $(reviewFormOptions).extend(options);
+                }
+                var actionMapping = {
+                    popup: {
+                        open: 'open',
+                        close: 'close',
+                        destroy: 'destroy'
+                    },
+                    non_popup: {
+                        open: 'show',
+                        close: 'hide',
+                        destroy: 'remove'
+                    }
+                };
+                <?php if (Mage::getStoreConfig('detailedreview/settings/review_form_popup')): ?>
+                    obj.dialog(actionMapping['popup'][action]);
+                    //obj.dialog(reviewFormOptions);
+                <?php else: ?>
+                    obj[actionMapping['non_popup'][action]]('fade');
+                <?php endif; ?>
+                if (typeof options != 'undefined') {
+                    options.each(function(element) {
+                       obj(element);
+                    });
+                }
+            }
+
+        })(DRjQuery)
+    });
+    //]]>
+</script>

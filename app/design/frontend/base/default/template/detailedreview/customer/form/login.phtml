@@ -1,0 +1,59 @@
+<?php
+/**
+ * MageWorkshop
+ * Copyright (C) 2012  MageWorkshop <mageworkshophq@gmail.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * @category   MageWorkshop
+ * @package    MageWorkshop_DetailedReview
+ * @copyright  Copyright (c) 2012 MageWorkshop Co. (http://mage-workshop.com)
+ * @license    http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPL-3.0)
+ * @author     MageWorkshop <mageworkshophq@gmail.com>
+ */
+?>
+<div class="account-login">
+    <form action="<?php echo $this->helper('detailedreview')->fixFormActionForIE($this->getPostActionUrl()) ?>" method="post" id="login-form">
+        <div>
+            <input type="hidden" name="referer" value="" />
+            <input type="hidden" name="detailedreview_login" value="1" />
+        </div>
+        <div class="content">
+            <h2><?php echo $this->__('Returning Customers:') ?></h2>
+            <p><?php echo $this->__('Please Log In') ?></p>
+            <p class="error-message"></p>
+            <ul class="form-list">
+                <li>
+                    <label for="email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+                    <div class="input-box">
+                        <input type="text" name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" class="input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" tabindex="1" />
+                    </div>
+                </li>
+                <li class="password">
+                    <label for="pass" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+                    <div class="input-box">
+                        <input type="password" name="login[password]" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" tabindex="2" />
+                    </div>
+                    <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="f-left" tabindex="3"><?php echo $this->__('Forgot Your Password?') ?></a>
+                </li>
+            </ul>
+        </div>                          
+        <div class="buttons-set">
+            <button type="submit" class="button" title="<?php echo $this->__('Login') ?>" name="send" id="send2" tabindex="4"><span><span><?php echo $this->__('Login') ?></span></span></button>
+            <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,118 @@
+<?php
+/**
+ * MageWorkshop
+ * Copyright (C) 2012  MageWorkshop <mageworkshophq@gmail.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * @category   MageWorkshop
+ * @package    MageWorkshop_DetailedReview
+ * @copyright  Copyright (c) 2012 MageWorkshop Co. (http://mage-workshop.com)
+ * @license    http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPL-3.0)
+ * @author     MageWorkshop <mageworkshophq@gmail.com>
+ */
+
+$helper = Mage::helper('detailedreview');
+$sliderEffect = Mage::getStoreConfig('detailedreview/category_options/slider_effect');
+$productCollection = $this->getProductCollection();
+$real_count = $productCollection->count();
+$config_visible_count = Mage::getStoreConfig('detailedreview/category_options/qty_visible_items');
+$display_product_image = Mage::getStoreConfig('detailedreview/category_options/product_image');
+if($real_count > 0):
+?>
+    <div class="block block-list block-reviewed <?php if ($this->getIsPerCategory()) { echo 'category'; } ?>">
+        <div class="block-title">
+            <strong><span>
+            <?php
+            if($this->getIsPerCategory()){
+                echo $this->__('Recent Reviews by Category');
+            }else{
+                echo $this->__('Recent Reviews');
+            }
+            ?>
+            </span></strong>
+        </div>
+        <div class="block-content">
+            <?php
+            if($this->getIsPerCategory()){
+                echo '<ul class="spy-effect-per-category">';
+            }else{
+                echo '<ul class="spy-effect">';
+            }
+            ?>
+                <?php foreach ($productCollection as $_product): ?>
+                <li>
+                    <div class="li-content">
+                        <?php
+                        $productUrl = $this->getUrlPath();
+                        $categories = $_product->getCategoryIds();
+                        if (is_array($categories)) {
+                            $_product->setCategoryId(array_shift($categories));
+                        }
+                        $productPath = $_product->getProductUrl();
+                        if($display_product_image):
+                        ?>
+                            <div class="thumbnail">
+                                <a href="<?php echo $productPath ?>">
+                                    <img src="<?php echo Mage::helper('catalog/image')->init($_product, 'small_image')->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)->resize(80, 80); ?>" alt=""/>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                        <div class="product-title">
+                            <a href="<?php echo $productPath ?>">
+                                <?php echo $_product->getName();?>
+                            </a>
+                        </div>
+                        <?php if (Mage::helper('detailedreview')->checkEnabledRatings() ): ?>
+                            <table class="ratings-table">
+                                <tr>
+                                    <td>
+                                        <div class="rating-box">
+                                            <div class="rating" style="width:<?php if($_product->getSum() && $_product->getCount()){ echo $_product->getSum() / $_product->getCount();}else{echo 0;}  ?>%;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        <?php endif; ?>
+                        <div class="clearer"></div>
+                        <div class="review-title"><?php echo nl2br($this->htmlEscape($_product->getTitle())) ?></div>
+                        <div class="detail"><?php echo $_product->getDetail() ?></div>
+                        <span class="nickname"><?php echo $this->__($this->htmlEscape($_product->getNickname())) ?></span>
+                        <div class="clearer"></div>
+                    </div>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+    <?php if ( $sliderEffect && $sliderEffect != 'none' && $real_count > $config_visible_count ): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        document.observe("dom:loaded", function() {
+            (function($){
+                $.noConflict();
+                <?php if($this->getIsPerCategory()): ?>
+                var element = 'ul.spy-effect-per-category';
+                <?php else: ?>
+                var element = 'ul.spy-effect';
+                <?php endif; ?>
+                $(element).simpleSpy(<?php echo $config_visible_count ?>, <?php echo 1000*Mage::getStoreConfig('detailedreview/category_options/pause') ?>, "<?php echo $sliderEffect ?>");
+            })(DRjQuery)
+        })
+        //]]>
+    </script>
+    <?php endif; ?>
+<?php endif; ?>

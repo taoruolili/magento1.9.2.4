@@ -1,0 +1,62 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?>
+<div class="col-wrapper">
+    <?php $blockNumber = $this->getNumbering(); ?>
+    <?php if ($blockNumber): ?>
+        <div class="onestep-title-number">
+            <h2>
+                <span class="one-step-checkout-number"><?php echo $blockNumber . '. '; ?></span>
+                <?php echo $this->__('PAYMENT METHOD'); ?></h2>
+        </div>
+    <?php else: ?>
+        <div class="onestep-title payment-title">
+            <h2><?php echo $this->__('PAYMENT METHOD'); ?></h2>
+        </div>
+    <?php endif; ?>
+    <div class="one-step-checkout-payment-methods">
+        <?php echo $this->getChildHtml('methods') ?>
+    </div>
+</div>
+<?php echo $this->getChildHtml('extra'); ?>
+<script type="text/javascript">
+    //<![CDATA[
+    document.observe('dom:loaded', function () {
+        window.payment = window.payment || {};
+        window.payment.switchMethod = Prototype.emptyFunction;
+        //paypal payment advanced support
+        window.checkout = {
+            setLoadWaiting: Prototype.emptyFunction,
+            accordion: {
+                container: {
+                    readAttribute: Prototype.emptyFunction
+                }
+            },
+            steps: [],
+            gotoSection: Prototype.emptyFunction
+        };
+        var checkoutReviewBtn = new Element('div', {'id': 'checkout-review-submit', 'style': 'display:none'});
+        var iframeWaiting = new Element('div', {'id': 'iframe-warning', 'style': 'display:none'});
+        window.document.body.appendChild(checkoutReviewBtn);
+        window.document.body.appendChild(iframeWaiting);
+    })
+    //]]>
+</script>

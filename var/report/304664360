@@ -1,0 +1,9 @@
+a:5:{i:0;s:614:"Error in file: "F:\xampp\htdocs\app\code\community\MageWorx\XSitemap\sql\xsitemap_setup\mysql4-upgrade-2.1.0-3.0.0.php" - SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '4-exclude_from_sitemap' for key 'UNQ_EAV_ATTRIBUTE_ENTITY_TYPE_ID_ATTRIBUTE_CODE', query was: INSERT INTO `eav_attribute` (`entity_type_id`, `attribute_code`, `backend_model`, `backend_type`, `backend_table`, `frontend_model`, `frontend_input`, `frontend_label`, `frontend_class`, `source_model`, `is_required`, `is_user_defined`, `default_value`, `is_unique`, `note`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";i:1;s:879:"#0 F:\xampp\htdocs\app\code\core\Mage\Core\Model\Resource\Setup.php(644): Mage::exception('Mage_Core', 'Error in file: ...')
+#1 F:\xampp\htdocs\app\code\core\Mage\Core\Model\Resource\Setup.php(422): Mage_Core_Model_Resource_Setup->_modifyResourceDb('upgrade', false, '4.6.6')
+#2 F:\xampp\htdocs\app\code\core\Mage\Core\Model\Resource\Setup.php(327): Mage_Core_Model_Resource_Setup->_installResourceDb('4.6.6')
+#3 F:\xampp\htdocs\app\code\core\Mage\Core\Model\Resource\Setup.php(235): Mage_Core_Model_Resource_Setup->applyUpdates()
+#4 F:\xampp\htdocs\app\code\core\Mage\Core\Model\App.php(428): Mage_Core_Model_Resource_Setup::applyAllUpdates()
+#5 F:\xampp\htdocs\app\code\core\Mage\Core\Model\App.php(354): Mage_Core_Model_App->_initModules()
+#6 F:\xampp\htdocs\app\Mage.php(684): Mage_Core_Model_App->run(Array)
+#7 F:\xampp\htdocs\index.php(83): Mage::run('', 'store')
+#8 {main}";s:3:"url";s:67:"/index.php/admin/index/logout/key/1b59e1787eed95df7449d7461e832e2d/";s:11:"script_name";s:10:"/index.php";s:4:"skin";s:7:"default";}

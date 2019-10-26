@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2010-2011 Amasty (http://www.amasty.com)
+* @package Amasty_Imgupload
+*/
+-->
+<layout>
+    <adminhtml_catalog_product_edit>
+        <reference name="head">
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/functions.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/upload.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/upload_drag.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/upload_select.js</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>amasty/amimgupload/upload.css</name><params/></action>
+            <action method="addCss"><name>amasty/amimgupload/images.css</name></action>
+        </reference>
+        <reference name="product_tabs">
+            <action method="addTab"><name>product_images</name><block>amimgupload/adminhtml_catalog_product_edit_tab_images</block></action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+    
+    <adminhtml_catalog_product_new>
+        <reference name="head">
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/functions.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/upload.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/upload_drag.js</name><params/></action>
+            <action method="addItem"><type>js</type><name>amasty/amimgupload/upload_select.js</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>amasty/amimgupload/upload.css</name><params/></action>
+            <action method="addCss"><name>amasty/amimgupload/images.css</name></action>
+        </reference>
+        <reference name="product_tabs">
+            <action method="addTab"><name>product_images</name><block>amimgupload/adminhtml_catalog_product_edit_tab_images</block></action>
+        </reference>
+    </adminhtml_catalog_product_new>
+</layout>

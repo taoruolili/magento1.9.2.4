@@ -1,0 +1,66 @@
+<?php $formData = $this->getFormData(); ?>
+<div class="gift-messages">
+    <input type="checkbox" name="use_gift_messages" id="use_gift_messages"
+           value="1" <?php if ($this->getItemsHasMesssages() || $this->getEntityHasMessage() || (isset($formData['is_used_gift_messages']) && $formData['is_used_gift_messages'])): ?> checked="checked"<?php endif; ?>
+           class="checkbox"/>
+    <input type="hidden" name="is_used_gift_messages" value="0" id="is_used_gift_messages"/>
+    <label for="use_gift_messages"><?php echo $this->__('Add a gift message') ?></label>
+</div>
+<div class="gift-messages-form" id="use-gift-message-form" style="display: none;height: 0;overflow: hidden;">
+    <div class="inner-box">
+        <?php if (Mage::helper('onestepcheckout/giftmessage')->isMessagesAvailable('quote', $this->getEntity())): ?>
+            <div class="whole-order">
+                <input id="giftmessage-type" type="hidden"
+                       name="giftmessage[<?php echo $this->getEntity()->getId() ?>][type]" value="quote"/>
+                <ul class="onestepcheckout-form-list">
+                    <li class="fields">
+                        <div class="field">
+                            <label for="gift-message-whole-from"><?php echo $this->__('From') ?></label>
+
+                            <div class="input-box">
+                                <input type="text" name="giftmessage[<?php echo $this->getEntity()->getId() ?>][from]"
+                                       id="gift-message-whole-from"
+                                       title="<?php echo $this->__('From') ?>"
+                                       value="<?php echo isset($formData['giftmessage'][$this->getEntity()->getId()]['from']) ?
+                                           $this->getEscaped($formData['giftmessage'][$this->getEntity()->getId()]['from'], $this->getDefaultFrom()) : '' ?>"
+                                       class="input-text validation-passed"
+                                       placeholder="<?php echo $this->__('Sender') ?>"
+                                    />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="gift-message-whole-to"><?php echo $this->__('To') ?></label>
+
+                            <div class="input-box">
+                                <input type="text" name="giftmessage[<?php echo $this->getEntity()->getId() ?>][to]"
+                                       id="gift-message-whole-to" title="<?php echo $this->__('To') ?>"
+                                       value="<?php echo isset($formData['giftmessage'][$this->getEntity()->getId()]['to']) ?
+                                           $this->getEscaped($formData['giftmessage'][$this->getEntity()->getId()]['to'], $this->getDefaultTo()) : '' ?>"
+                                       class="input-text validation-passed"
+                                       placeholder="<?php echo $this->__('Receiver') ?>"
+                                    />
+                            </div>
+                        </div>
+                    </li>
+                    <li class="wide">
+                        <label for="gift-message-whole-message"><?php echo $this->__('Message') ?></label>
+
+                        <div class="input-box">
+                            <textarea id="gift-message-whole-message"
+                                      class="input-text validation-passed giftmessage-area"
+                                      name="giftmessage[<?php echo $this->getEntity()->getId() ?>][message]"
+                                      title="<?php echo $this->__('Message') ?>" rows="5"
+                                      cols="10"
+                                      placeholder="<?php echo $this->__('Write message') ?>"><?php echo isset($formData['giftmessage'][$this->getEntity()->getId()]['message']) ? $this->getEscaped($formData['giftmessage'][$this->getEntity()->getId()]['message']) : '' ?></textarea>
+                        </div>
+                    </li>
+                </ul>
+                <script type="text/javascript">
+                    //<![CDATA[
+                    //toogleRequired('gift-message-whole-message', ['gift-message-whole-from','gift-message-whole-to']);
+                    //]]>
+                </script>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

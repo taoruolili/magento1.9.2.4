@@ -1,0 +1,46 @@
+<!--@subject Invitation from  {{var customer.name}} @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"htmlescape var=$customer.name":"Customer Name",
+"store url=\"customer/account/\"":"Customer Account Url",
+"var customer.email":"Customer Email"}
+@-->
+
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+<body
+    style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<h1>Dear {{var customer_name}}!</h1>
+
+<p>On {{var quote.updated_at|formatDateTime:long}} you left a cart in our shop with the following content:</p>
+
+<table width=100% border=1 cellspacing=1 cellpadding=5>
+    <tr>
+        <th>No</th>
+        <th>Product</th>
+        <th>SKU</th>
+        <th>Qty</th>
+        <th>Row Total</th>
+    </tr>
+    {{layout handle="onestepcheckout_abandonedcart_quote_item" order=$quote}}
+    <tr>
+        <th colspan=4 align=left>Rows total: {{var row_item_row_number}}</th>
+        <th colspan=3>
+            <table width=100% cellspacing=0 cellpadding="10" style="background-color:yellow">
+                <tr>
+                    <td align="left">Grand Total:</td>
+                    <td align="right">{{var quote.grand_total|formatPrice}}</td>
+                </tr>
+            </table>
+    </tr>
+</table>
+<p>Please come back and take it here: <a href="{{var url_resume}}">Your cart link</a></p>
+<br>
+{{var related}}
+<br>
+<br>
+<br>
+<hr>
+</body>

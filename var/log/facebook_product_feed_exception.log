@@ -1,0 +1,22 @@
+2019-05-14T16:08:01+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/www.buyyzys.me/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-14T16:46:29+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/www.buyyzys.me/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-29T07:59:10+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/www.buyyzys.me/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T09:54:15+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T09:55:47+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T10:11:28+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T10:11:28+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T10:20:48+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T10:26:22+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T10:45:58+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T14:15:59+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T14:34:58+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T14:40:22+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T15:19:37+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-30T15:23:33+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-05-31T09:00:04+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/buyyzys.org/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-09-09T02:34:22+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/ciudadpoesia.com/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-09-09T02:34:23+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/ciudadpoesia.com/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-09-09T06:43:00+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/ciudadpoesia.com/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-09-19T07:33:38+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/ciudadpoesia.com/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-09-19T07:34:55+00:00 INFO (6): ERROR8:Undefined property: FBProductFeedSamples::$stock @ /www/wwwroot/ciudadpoesia.com/app/code/community/Facebook/AdsExtension/Model/FBProductFeed.php L190
+2019-09-28T03:34:22+00:00 INFO (6): ERROR2:vsprintf(): Too few arguments @ D:\wamp\www\testmagento\app\code\core\Mage\Core\Model\Translate.php L416

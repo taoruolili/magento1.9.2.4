@@ -1,0 +1,28 @@
+.dropable
+{
+    border: 5px dashed #d3d3d3;
+    text-align: center;
+    font-weight: bold;
+    color: #d3d3d3;
+}
+
+.dropable-large
+{
+    width: 100%;
+    height: 220px;
+    font-size: 32px;
+}
+
+.dropable-grid
+{
+    width: 300px;
+    height: 150px;
+    font-size: 22px;
+}
+
+.dropable-over
+{
+    border: 5px dashed #fea53f;
+    color: #fea53f;
+    background-color: #fff9e9;
+}

@@ -1,0 +1,150 @@
+<root>
+    <blocks>
+        <cms_block>
+            <title>Magegiant OSC - 1 Column Top</title>
+            <identifier>magegiant-osc-1column-top</identifier>
+            <content>
+                <![CDATA[
+                    <div class="row-mg">
+                    <div class="sv-wrapper-onstep col-mg mg-lg-6 mg-md-6 mg-sm-6 mg-xs-6">
+                        <div class="sv-onstep">
+                            <a title="Onestep Image" href="#"><img src="{{media url="wysiwyg/onestep-image/free-guarantee.png"}}" alt="Onestep Image" /></a>
+                        </div>
+                    </div>
+
+                    <div class="sv-wrapper-onstep col-mg mg-lg-6 mg-md-6 mg-sm-6 mg-xs-6">
+                        <div class="sv-onstep">
+                            <a title="Onestep Image" href="#"><img src="{{media url="wysiwyg/onestep-image/money-back.png"}}" alt="Onestep Image" /></a>
+                        </div>
+                    </div>
+
+                    <div class="sv-wrapper-onstep col-mg mg-lg-6 mg-md-6 mg-sm-6 mg-xs-6">
+                        <div class="sv-onstep">
+                            <a title="Onestep Image" href="#"><img src="{{media url="wysiwyg/onestep-image/free-upgrade.png"}}" alt="Onestep Image" /></a>
+                        </div>
+                    </div>
+
+                    <div class="sv-wrapper-onstep col-mg mg-lg-6 mg-md-6 mg-sm-6 mg-xs-6">
+                        <div class="sv-onstep">
+                            <a title="Onestep Image" href="#"><img src="{{media url="wysiwyg/onestep-image/secure-checkout.png"}}" alt="Onestep Image" /></a>
+                        </div>
+                    </div>
+                </div>
+            
+                ]]>
+            </content>
+            <is_active>1</is_active>
+            <stores>
+                <item>0</item>
+            </stores>
+        </cms_block>
+        <cms_block>
+            <title>Magegiant OSC - 1 Column Middle</title>
+            <identifier>magegiant-osc-1column-middle</identifier>
+            <content>
+                <![CDATA[
+                    <div class="row-mg">
+                        <div class="img-static-onstep col-mg mg-lg-12 mg-md-12 mg-sm-12  mg-xs-12">
+                            <div class="img-st-onstep">
+                                <a title="" href="#"><img src="{{media url="wysiwyg/onestep-image/secure-site-seal.png"}}" alt="seals" /></a>
+                            </div>
+                        </div>
+                    </div>
+                        ]]>
+            </content>
+            <is_active>1</is_active>
+            <stores>
+                <item>0</item>
+            </stores>
+        </cms_block>
+        <cms_block>
+            <title>Magegiant OSC 1Column Bottom</title>
+            <identifier>magegiant-osc-1column-bottom</identifier>
+            <content>
+                <![CDATA[
+                     <div class="row-mg">
+                    <div class="happy-customer-onstep col-mg mg-lg-6 mg-md-6">
+                        <div class="customer-say">
+                            <a class="cus-image-onestep" title="Jonathan Lien" href="#"><img alt="Jonathan Lien" src="{{media url="wysiwyg/onestep-image/customer-image-onestep.png"}}" /> </a>
+                            <div class="detail-content">When looking for a solution for our dealer locating, I compared Magento extensions and modules from different providers believe that...</div>
+                        </div>
+                        <div class="customer-info-onestep">
+                            <h2 class="name-customer"><a title="Jonathan Lien" href="#">Jonathan Lien</a></h2>
+                            <p class="job-customer">Customer</p>
+                        </div>
+                    </div>
+                    <div class="happy-customer-onstep col-mg mg-lg-6 mg-md-6">
+                        <div class="customer-say">
+                            <a class="cus-image-onestep" title="Jonathan Lien" href="#"><img alt="Jonathan Lien" src="{{media url="wysiwyg/onestep-image/customer-image-onestep.png"}}" /> </a>
+                            <div class="detail-content">When looking for a solution for our dealer locating, I compared Magento extensions and modules from different providers believe that...</div>
+                        </div>
+                        <div class="customer-info-onestep">
+                            <h2 class="name-customer"><a title="Jonathan Lien" href="#">Jonathan Lien</a></h2>
+                            <p class="job-customer">Customer</p>
+                        </div>
+                    </div>
+                </div>
+                        ]]>
+            </content>
+            <is_active>1</is_active>
+            <stores>
+                <item>0</item>
+            </stores>
+        </cms_block>
+        <cms_block>
+            <title>Magegiant OSC - Block Secure</title>
+            <identifier>magegiant-osc-block-secure</identifier>
+            <content>
+                <![CDATA[
+                        <div class="row-mg">
+                            <div class="img-static-onstep col-mg mg-lg-12 mg-md-12 mg-sm-12  mg-xs-12">
+                                <div class="img-st-onstep">
+                                    <a href="#"><img src="{{media url="wysiwyg/onestep-image/secure-site-seal.png"}}" alt="Secure" /></a>
+                                </div>
+                            </div>
+                        </div>
+                        ]]>
+            </content>
+            <is_active>1</is_active>
+            <stores>
+                <item>0</item>
+            </stores>
+        </cms_block>
+
+        <cms_block>
+            <title>Magegiant OSC - Under Shipping Method</title>
+            <identifier>magegiant-osc-under-shipping-method</identifier>
+            <content>
+                <![CDATA[
+                        <div style="width: 100%; background-color: #E3EC94; padding: 5px; margin-bottom: 1em; font-size: 0.8em;">
+                            <p>This is a sample shipping note. You can insert images, text, links</p>
+                        </div>
+                        ]]>
+            </content>
+            <is_active>1</is_active>
+            <stores>
+                <item>0</item>
+            </stores>
+        </cms_block>
+
+        <cms_block>
+            <title>Magegiant OSC - Under Billing Method</title>
+            <identifier>magegiant-osc-under-billing-method</identifier>
+            <content>
+                <![CDATA[
+                        <div class="row-mg">
+                        <div class="col-mg mg-lg-12 mg-md-12 mg-sm-12  mg-xs-12">
+                            <div class="img-st-onstep"><img src="{{media url="wysiwyg/onestep-image/secure-site-seal.png"}}" alt="Secure" /></div>
+                            </div>
+                        </div>
+                        ]]>
+            </content>
+            <is_active>1</is_active>
+            <stores>
+                <item>0</item>
+            </stores>
+        </cms_block>
+
+
+    </blocks>
+</root>

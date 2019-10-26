@@ -1,0 +1,130 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?>
+<div id="one-step-checkout-address">
+    <div id="one-step-checkout-billing-address">
+        <?php echo $this->getChildHtml('billing.address'); ?>
+    </div>
+    <?php if ($this->allowShipToDifferent()): ?>
+        <div id="one-step-checkout-shipping-address" style="overflow: hidden;height: 0px;display:none;">
+            <?php echo $this->getChildHtml('shipping.address'); ?>
+        </div>
+    <?php endif; ?>
+</div>
+<script type="text/javascript">
+    //<![CDATA[
+    var giantOSCAddress = new PookCollectInStoreAddress({
+        containerSelector: '#one-step-checkout-address',
+        shipSameAddressId: "billing:use_for_shipping_yes",
+        shipDifferentAddressId: "billing:use_for_shipping_no",
+        storePickupId: "billing:collect_in_store",
+        billing: {
+            containerSelector: '#one-step-checkout-billing-address',
+            changeAddressSelectSelector: '#billing-address-select',
+            newAddressContainerSelector: '#billing-address-fields',
+            createAccountInputId: 'billing:create_account',
+            passwordContainerSelector: '#one-step-checkout-billing-password',
+            addressChangeTriggerElementsIds: [
+                'billing:country_id',
+                'billing:region',
+                'billing:region_id',
+                'billing:city',
+                'billing:postcode',
+            ],
+            addressCountryRegionElementsIds: {
+                'countryId': 'billing:country_id',
+                'region': 'billing:region',
+                'regionId': 'billing:region_id'
+            }
+        },
+        shipping: {
+            containerSelector: '#one-step-checkout-shipping-address',
+            changeAddressSelectSelector: '#shipping-address-select',
+            newAddressContainerSelector: '#shipping-address-fields',
+            addressChangeTriggerElementsIds: [
+                'shipping:country_id',
+                'shipping:region',
+                'shipping:region_id',
+                'shipping:city',
+                'shipping:postcode'
+            ],
+            addressCountryRegionElementsIds: {
+                'countryId': 'shipping:country_id',
+                'region': 'shipping:region',
+                'regionId': 'shipping:region_id'
+            }
+        },
+        addressChangedUrl: <?php echo Zend_Json::encode($this->saveAddressUrl());?>,
+        saveAddressUrl: <?php echo Zend_Json::encode($this->getSaveFormValuesUrl());?>
+    });
+    <?php if (Mage::helper('onestepcheckout/config')->isAutoDetectedAddress()): ?>
+    var billingUpdater = typeof billingRegionUpdater !== 'undefined' ? billingRegionUpdater : null;
+    var billingAddressAutoFill = new MagegiantOnestepcheckoutAddressDetect(
+        {
+            inputSelector: "billing:street1",
+            addressType: "billing",
+            addressElementsIds: [
+                'street1', 'city', 'region_id', 'region', 'country_id', 'postcode'
+            ],
+            componentForm: {
+                street_number: 'short_name',
+                route: 'long_name',
+                neighborhood: 'short_name',
+                sublocality_level_1: 'short_name',
+                administrative_area_level_2: 'short_name',
+                locality: 'long_name',
+                administrative_area_level_1: 'short_name',
+                country: 'short_name',
+                postal_code: 'short_name',
+                sublocality: 'long_name'
+            },
+            regionUpdater: billingUpdater,
+            giantOSCAddress: giantOSCAddress,
+            geolocation: 'giant-geolocation',
+        }
+    );
+    var shippingUpdater = typeof shippingRegionUpdater !== 'undefined' ? shippingRegionUpdater : null;
+    var shippingAddressAutoFill = new MagegiantOnestepcheckoutAddressDetect(
+        {
+            inputSelector: "shipping:street1",
+            addressType: "shipping",
+            addressElementsIds: [
+                'street1', 'city', 'region_id', 'region', 'country_id', 'postcode'
+            ],
+            componentForm: {
+                street_number: 'short_name',
+                route: 'long_name',
+                neighborhood: 'short_name',
+                sublocality_level_1: 'short_name',
+                administrative_area_level_2: 'short_name',
+                locality: 'long_name',
+                administrative_area_level_1: 'short_name',
+                country: 'short_name',
+                postal_code: 'short_name',
+                sublocality: 'long_name'
+            },
+            regionUpdater: shippingUpdater,
+            giantOSCAddress: giantOSCAddress,
+        }
+    );
+    <?php endif; ?>
+    //]]>
+</script>

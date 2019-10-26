@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2008-2013 Amasty (http://www.amasty.com)
+* @package Amasty_File
+*/
+-->
+
+<config>
+    <events>
+        <catalog_product_save_after>
+            <observers>
+                <Amasty_File>
+                    <type>singleton</type>
+                    <class>amfile/observer</class>
+                    <method>saveProductTabData</method>
+                </Amasty_File>
+            </observers>
+        </catalog_product_save_after>
+    </events>
+    <menu>
+        <catalog>
+            <children>
+                <amfile translate="title" module="amfile">
+                    <title>Product Attachments</title>
+                    <sort_order>400</sort_order>
+
+                    <children>
+                        <amfile_report translate="title" module="amfile">
+                            <title>Download Report</title>
+                            <action>amfile/adminhtml_report/report</action>
+                            <sort_order>600</sort_order>
+                        </amfile_report>
+                    </children>
+                    <children>
+                        <amfile_icons translate="title" module="amfile">
+                            <title>Icons</title>
+                            <action>amfile/adminhtml_icon</action>
+                            <sort_order>500</sort_order>
+
+                        </amfile_icons>
+                    </children>
+                </amfile>
+            </children>
+        </catalog>
+    </menu>
+
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <catalog>
+                        <children>
+                            <amfile translate="title" module="amfile">
+                                <title>Product Attachments</title>
+                                <sort_order>400</sort_order>
+
+                                <children>
+                                    <amfile_report translate="title" module="amfile">
+                                        <title>Download Report</title>
+                                        <action>amfile/adminhtml_report/report</action>
+                                        <sort_order>600</sort_order>
+                                    </amfile_report>
+                                </children>
+                                <children>
+                                    <amfile_icons translate="title" module="amfile">
+                                        <title>Icons</title>
+                                        <action>amfile/adminhtml_icon</action>
+                                        <sort_order>500</sort_order>
+                                    </amfile_icons>
+                                </children>
+                            </amfile>
+                        </children>
+                    </catalog>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <amfile translate="title" module="amfile">
+                                        <title>Product Attachments</title>
+                                    </amfile>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+
+    <translate>
+        <modules>
+            <Amasty_File>
+                <files>
+                    <default>Amasty_File.csv</default>
+                </files>
+            </Amasty_File>
+        </modules>
+    </translate>
+</config>

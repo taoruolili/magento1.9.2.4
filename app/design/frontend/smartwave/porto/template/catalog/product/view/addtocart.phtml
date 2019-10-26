@@ -1,0 +1,50 @@
+<?php $_product = $this->getProduct(); ?>
+<?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php if($_product->isSaleable()): ?>
+    <div class="add-to-cart">
+        <?php if(!$_product->isGrouped()): ?>
+        <label for="qty"><?php echo $this->__('Qty:') ?></label>
+        <div class="qty-holder">
+            <input type="text" name="qty" id="qty" data-productprice="<?php echo number_format(Mage::registry('current_product')->getPrice(),2); ?>" data-count="<?php $count = $this->helper('checkout/cart')->getSummaryCount(); if($count){ echo $count; }else{ echo 0; } ?>" data-price="<?php echo number_format($this->helper('checkout/cart')->getQuote()->getGrandTotal(), 2); ?>"  maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+            <div class="qty-changer">
+                <a href="javascript:void(0)" class="qty_inc thinkidea-qty"><i class="icon-up-dir"></i></a>
+                <a href="javascript:void(0)" class="qty_dec thinkidea-qty"><i class="icon-down-dir"></i></a>
+            </div>
+
+            
+        </div>
+        <?php endif; ?>
+        <button type="button" title="<?php echo $buttonTitle ?>" class="button thinkidea-add-cart-btn btn-cart" <?php if(!Mage::getStoreConfig('limitprice_cfg/general/isOpen')): ?>onclick="productAddToCartForm.submit(this);"<?php endif; ?>><span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span></button>
+        <?php echo $this->getChildHtml('', true, true) ?>
+    </div>
+<?php endif; ?>
+
+<?php if(Mage::getStoreConfig('limitprice_cfg/general/isOpen')): ?>
+<script>
+    jQuery(document).ready(function($) {
+        var _noAllowCount = <?php echo Mage::getStoreConfig('limitprice_cfg/general/noallowSaleCount'); ?>;
+        var _allowSalePrice = <?php echo Mage::getStoreConfig('limitprice_cfg/general/allowSalePrice'); ?>;
+        var wraning_text = "<?php echo Mage::getStoreConfig('limitprice_cfg/general/wraning'); ?>";
+        var _productPrice = $('#qty').attr('data-productprice');
+        var _cartPrice = $('#qty').attr('data-price');
+        var _cartCount = $('#qty').attr('data-count');
+        var productPrice = parseFloat(_productPrice);
+        var cartCount = parseInt(_cartCount);
+        var cartPrice = parseFloat(_cartPrice);
+        var real_price = cartPrice + productPrice;
+
+        $(document).on('click','.thinkidea-add-cart-btn',function(){
+            console.log(cartCount+'===>'+cartPrice+'===>'+real_price);
+            console.log(typeof(_noAllowCount)+'===>'+typeof(_allowSalePrice));
+
+            if(cartCount >= _noAllowCount-1 && real_price > _allowSalePrice){
+                alert(wraning_text);
+            }else{
+                productAddToCartForm.submit(this);
+            }
+        });
+        
+    });
+</script>
+
+<?php endif; ?>

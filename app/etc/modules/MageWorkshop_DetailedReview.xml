@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageWorkshop_DetailedReview>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+            	<Mage_Catalog />
+            </depends>
+        </MageWorkshop_DetailedReview>
+    </modules>
+</config>

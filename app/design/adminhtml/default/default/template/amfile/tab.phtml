@@ -1,0 +1,25 @@
+<?php
+//$d = method_exists('Varien_Date', 'formatDate1');
+//var_dump($d);
+?>
+
+<div class="entry-edit custom-options product-custom-options" id="amfile-uploads">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Upload Files'); ?></h4>
+        <div class="right">
+            <button type="button" class="scalable add" title="Add" /><span><?php echo $this->__('Add New File'); ?></span></button>
+        </div>
+    </div>
+
+    <input type="hidden" id="amfile_store_id" value="<?php echo Mage::app()->getRequest()->getParam('store', 0)?>" />
+    <input type="hidden" id="amfile_product_id" value="<?php echo Mage::registry('product')->getId()?>" />
+    <input type="hidden" id="amfile_ajax_action" value="<?php echo $this->getUrl('amfile/adminhtml_file/update')?>" />
+
+    <div class="fieldset fieldset-wide">
+        <div class="hor-scroll container">
+            <div class="drop main" style="display: none">Click or drop files here</div>
+            <?php echo $this->getChildHtml('items')?>
+            <?php echo $this->getChildHtml('new_item')?>
+        </div>
+    </div>
+</div>

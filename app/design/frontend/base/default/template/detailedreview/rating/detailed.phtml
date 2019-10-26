@@ -1,0 +1,176 @@
+<?php
+/**
+ * MageWorkshop
+ * Copyright (C) 2012  MageWorkshop <mageworkshophq@gmail.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * @category   MageWorkshop
+ * @package    MageWorkshop_DetailedReview
+ * @copyright  Copyright (c) 2012 MageWorkshop Co. (http://mage-workshop.com)
+ * @license    http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPL-3.0)
+ * @author     MageWorkshop <mageworkshophq@gmail.com>
+ */
+
+$currentUrl = preg_replace('/\?.*/', '', $this->helper('core/url')->getCurrentUrl());
+$helperDetailedreview = $this->helper('detailedreview');
+$isCustomerLogged = $this->helper('customer')->isLoggedIn();
+$isGuestAllowToWrite = $this->helper('review')->getIsGuestAllowToWrite();
+$arrayQtyMarks = $this->getQtyMarks();
+$sum = $this->getCountReviewsWithRating();
+$ratingsEnabled = Mage::helper('detailedreview')->checkEnabledRatings();
+$showRating = Mage::helper('detailedreview')->checkFieldAvailable('review_graph');
+?>
+<div class="review-top">
+    <div class="review-average-info">
+        <div class="button-write-review">
+            <?php if ( !$helperDetailedreview->isUserAbleToWriteReview() ): ?>
+            <span class="error"><?php echo $this->__('You are not Allowed to Write a Review.'); ?></span>
+            <?php else: ?>
+            <?php $redirectUrl = $currentUrl  . $helperDetailedreview->getCurrentUrlWithNewParam('show_popup','1'); ?>
+            <input type="hidden" value="<?php echo htmlspecialchars($redirectUrl); ?>" />
+            <input type="hidden" value="<?php echo $this->helper('core/url')->getEncodedUrl($redirectUrl);?>" />
+            <input class="review-dialog" type='button' value="<?php echo $this->__('Write A Review') ?>" />
+            <?php endif; ?>
+        </div>
+        <?php
+            $summary = $this->getSummary();
+            if ($summary && $ratingsEnabled):
+        ?>
+            <div class="average-rating">
+                <div class="average-caption"><span><?php echo $this->__('Average Rating:') ?></span></div>
+                <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                    <div class="rating-box">
+                        <div class="rating" style="width:<?php echo ceil($summary) ?>%;">
+                            <meta itemprop="worstRating" content="1"/>
+                            <meta itemprop="ratingValue" content="<?php echo ceil($summary) ?>" />
+                            <meta itemprop="bestRating" content="100" />
+                        </div>
+                    </div>
+                    <div class="average-based-on">
+                        <?php
+                        if ($sum == 1) {
+                            echo $this->__('based on %s review', $sum);
+                        } else {
+                            echo $this->__('based on %s reviews', $sum);
+                        }
+                        echo '<meta itemprop="reviewCount" content="' . $sum . '"/>';
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if ( $helperDetailedreview->checkFieldAvailable('sizing') && $sizing = $this->getAverageSizing()):?>
+            <div class="average-sizing-box">
+                <div class="average-caption"><span><?php echo $this->__('Average Sizing:') ?></span></div>
+                <?php $reviewSizing = Mage::getSingleton('detailedreview/review_sizing'); ?>
+                <div class="average-sizing"><span><?php echo $reviewSizing->getOptionValue($sizing); ?></span></div>
+                <div class="sizing-bar"><div style="width:<?php echo $reviewSizing->getOptionWidth($sizing) ?>%;"></div>    </div>
+            </div>
+        <?php endif;?>
+    </div>
+    <div class="filters" style="display: none;">
+
+        <?php if ($isShowFilters = Mage::getStoreConfig('detailedreview/filters/allow_result_filters')): ?>
+            <h4><?php echo $this->__('Result Filters') ?></h4>
+        <?php endif; ?>
+        <form method="get" action="<?php echo htmlspecialchars( $this->helper('core/url')->getCurrentUrl() ); ?>" id="review_search_mini_form">
+            <div class="form-search">
+                <input type="hidden" value="1" name="feedback"/>
+                <?php if ($request = $this->getRequest()) : ?>
+                    <?php foreach ($request->getParams()  as $key => $value): ?>
+                        <?php if ($key == 'feedback' || $key == 'keywords') continue; ?>
+                        <input type="hidden" value="<?php echo $this->escapeHtml($value) ?>"
+                               name="<?php echo $this->escapeHtml($key) ?>"/>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php $keywords = isset($request) ? $request->getParam('keywords') : ''; ?>
+                <input type="text" class="input-text ac-off" value="<?php echo $this->escapeHtml($keywords) ?>" name="keywords" placeholder="<?php echo $this->__('search in reviews') ?>" id="review-search"/>
+                <button type="submit" class="search-review-button"><span><span><?php echo $this->__('Go') ?></span></span></button>
+                <script type="text/javascript">
+                    //<![CDATA[
+//                         var searchReviewForm = new Varien.searchForm('review_search_mini_form', 'review-search', 'Search in reviews');
+                    document.observe("dom:loaded", function() {
+                        (function($){
+                            $('.ac-off').placeholder();
+                            $(".ac-off").attr("autocomplete", "off");
+                        })(DRjQuery)
+                    });
+//                        $$(".ac-off").each(function(el){el.autocomplete = 'off';})
+                    //]]>
+                </script>
+            </div>
+        </form>
+    </div>
+
+    <?php if($isShowFilters): ?>
+    <div class="review-left">
+        <ul class="review-date-filters">
+            <?php foreach ($this->getAvailableDateRanges() as $k => $v):?>
+                <?php $sumByRange = $this->getQtyByRange($k); ?>
+                <?php if(($k == 1) && (!Mage::getSingleton( 'customer/session' )->isLoggedIn())) continue; ?>
+                <li<?php if ($helperDetailedreview->isInGetParams('st', $k)):?> class="active"<?php endif; ?>>
+                    <a href="<?php echo htmlspecialchars($currentUrl . $helperDetailedreview->getCurrentUrlWithNewParam('st', $k));?>">
+                        <span><?php echo $v . ' (' . $sumByRange . ')';?></span>
+                    </a>
+                </li>
+            <?php endforeach;?>
+        </ul>
+        <ul class="attr-rating">
+            <?php foreach ( $this->getAvailableFilterAttributes() as $k => $v ):?>
+                <?php if ($helperDetailedreview->checkAvailableFilter($k)):?>
+                    <li>
+                        <input type="checkbox" <?php if ($helperDetailedreview->isInGetParams($k,'true')):?>checked="checked"<?php endif;?> onclick="setLocation(this.value)" value="<?php echo htmlspecialchars( $currentUrl . $helperDetailedreview->getCurrentUrlWithNewParam($k,'true') );?>"/>
+                        <span><?php echo $this->__($v);?></span>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($showRating && $summary && $ratingsEnabled): ?>
+        <div class="review-right">
+            <div class="separate-rating">
+                <?php for ($key=0;$key<5;$key++){ ?>
+                <div class="mark-rating">
+                    <div class="rating-box">
+                        <div class="rating" style="width:<?php echo ceil(20*(5-$key)) ?>%;"></div>
+                    </div>
+                    <div class="scroll-box">
+                        <div class="scroll-rating" style="width:<?php echo ( isset($arrayQtyMarks[5-$key]) && $sum != 0 ) ? ceil(100*$arrayQtyMarks[5-$key]/$sum) : 0 ?>%;"></div>
+                    </div>
+                    <div class="rating-percent">
+                         <span><?php echo ( isset ($arrayQtyMarks[5-$key]) && $sum != 0 ) ? ceil(100*$arrayQtyMarks[5-$key]/$sum) . '% (' . $arrayQtyMarks[5-$key] . ')' : '0% (0)'; ?></span>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <div class="review-sorts" style="display: none;">
+    <?php /* <span>Showing <?php echo $sum;?> of <?php echo $tempSum;?> reviews <a href="<?php echo $currentUrl?>?feedback=1#feedback" >Clear Filters</a></span> */ ?>
+    <?php $selectedOrder = $this->getCurrentSorting(); ?>
+        <?php if ($helperDetailedreview->isInGetParams(array('st', 'vb', 'ir', 'vr', 'hc', 'mr', 'keywords'))): ?>
+            <span><a class="clear-filters-link" href="<?php echo $this->getClearFiltersUrl(); ?>" ><?php echo $this->__('Clear Filters') ?></a></span>
+        <?php endif; ?>
+        <select class="select-review-sorts" onchange="setLocation(this.value)">
+            <?php foreach ($this->getAvailableSorts($ratingsEnabled) as $k => $v):?>
+                <option <?php if ( $selectedOrder == $k ): ?>selected="selected"<?php endif;?> value="<?php echo $currentUrl . htmlspecialchars( $helperDetailedreview->getCurrentUrlWithNewParam('sort',$k) );?>"><?php echo $this->__($v) ?></option>
+            <?php endforeach;?>
+        </select>
+    </div>
+</div>

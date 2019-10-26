@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Jeasy_Checkout>
+            <version>0.0.1</version>
+        </Jeasy_Checkout>
+    </modules>
+    <global>
+        <models>
+            <jeasy_checkout>
+                <class>Jeasy_Checkout_Model</class>
+            </jeasy_checkout>
+        </models>
+    </global>
+    <frontend>
+        <events>
+            <checkout_cart_add_product_complete>
+                <observers>
+                    <checkout_cart_add_product_complete>
+                        <class>jeasy_checkout/observer</class>
+                        <method>onAddProductComplete</method>
+                    </checkout_cart_add_product_complete>
+                </observers>
+            </checkout_cart_add_product_complete>
+        </events>
+    </frontend>
+</config>

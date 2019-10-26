@@ -1,0 +1,49 @@
+/*===================================================================
+|                            CONFIGUARATION STYLE                    |
+====================================================================*/
+/*General*/
+#magegiant-one-step-checkout button.button, .one-step-checkout-popup button.button,#one-step-checkout-login-popup button.button span{
+background: #3399cc}
+/*Authentication*/
+
+#magegiant-one-step-checkout .onestep-title,#magegiant-one-step-checkout .onestep-title-number,
+.one-step-checkout-popup .onestep-title
+{
+background-color: #3399cc;
+}
+
+/*Billing Information*/
+
+#magegiant-one-step-checkout .customer-name .name-firstname {
+width: 50%;
+}
+
+#magegiant-one-step-checkout .customer-name .name-lastname {
+width: 50%;
+}
+#magegiant-one-step-checkout .one-step-checkout-place-order .button{
+background: #3398CC}
+#magegiant-one-step-checkout .button-action{
+background-color: #3399cc}
+/*=======STATIC BLOCK========*/
+.static-right-content .sv-onstep > a:hover,
+.img-static-onstep .img-st-onstep > a:hover{
+border-color:#3399cc;
+}
+
+.happy-customer-onstep  .customer-info-onestep .name-customer a:hover{
+color:#3399cc;
+}
+/*Fix for version <1.9*/
+/*Fix for enterprise version*/
+/*===================================================================
+|                           END CONFIGUARATION STYLE                 |
+====================================================================*/
+
+
+/*===================================================================
+|                           Custom STYLE                             |
+====================================================================*/
+/*===================================================================
+|                           End Custom STYLE                         |
+====================================================================*/

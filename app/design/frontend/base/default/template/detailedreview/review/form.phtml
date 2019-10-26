@@ -1,0 +1,448 @@
+<?php
+/**
+ * MageWorkshop
+ * Copyright (C) 2012  MageWorkshop <mageworkshophq@gmail.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * @category   MageWorkshop
+ * @package    MageWorkshop_DetailedReview
+ * @copyright  Copyright (c) 2012 MageWorkshop Co. (http://mage-workshop.com)
+ * @license    http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPL-3.0)
+ * @author     MageWorkshop <mageworkshophq@gmail.com>
+ */
+
+$helperDetailedreview = $this->helper('detailedreview');
+$productID = Mage::registry('current_product')->getId();
+$displayCaptcha = Mage::getStoreConfig('detailedreview/captcha/enabled');
+$public_key = Mage::getStoreConfig('detailedreview/captcha/public_key');
+?>
+<div class="review-dialog-block" style="display: none;">
+    <div class="form-add">
+        <?php if ($this->getAllowWriteReviewFlag()): ?>
+        <script type="text/javascript">
+            function onResponse(d) {
+                eval('var obj = ' + d + ';');
+                alert('File is' + obj.filename + (obj.success ? " " : " not") + "loaded.");
+            }
+        </script>
+        <iframe id="upload-img" name="upload-img" style="display: none"></iframe>
+        <form action="<?php echo $this->getAction() ?>" method="post" id="review-form" target="upload-img" enctype="multipart/form-data">
+            <fieldset>
+                <input type="hidden" name="id" value="<?php echo $productID; ?>" />
+
+                <?php echo $this->getChildHtml('form_fields_before')?>
+                    <div class="header">
+                        <span class="tell-us"><?php echo $this->__("Tell us what you think about this item") ?>:</span>
+                        <?php if (!Mage::getStoreConfig('detailedreview/settings/review_form_popup')) : ?>
+                            <p class="minimize"><span><span><?php echo $this->__('Minimize') ?></span></span></p>
+                        <?php endif; ?>
+                    </div>
+                    <span id="input-message-box"></span>
+                <?php if( $this->getRatings() && $this->getRatings()->getSize()): ?>
+                    <div class="overall-raiting with-border">
+                        <div class="left">
+                            <div class="title"><span><?php echo $this->__("Overall Rating") ?></span> <em class="required">*</em></div>
+                        </div>
+
+
+
+                        <div class="right">
+                            <?php $countRatings = count($this->getRatings()); ?>
+                            <?php foreach ($this->getRatings() as $_rating): ?>
+                                <?php if ( $countRatings > 1 ): ?>
+                                <div class="rating-code"><?php echo $_rating->getRatingCode(); ?></div>
+                                <?php endif; ?>
+                                <ul>
+                                <?php $sizeOptions = sizeof($_rating->getOptions()); $index=0; ?>
+                                <?php foreach ($_rating->getOptions() as $_option): $index++;?>
+                                    <li class="active">
+                                        <div class="separate-rating-star"></div>
+                                        <input type="radio" <?php if ( $sizeOptions ==  $index ) :?>checked="checked" <?php endif; ?>name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" />
+                                    </li>
+                                <?php endforeach; ?>
+                                </ul>
+                            <?php endforeach; ?>
+                            <input type="hidden" name="validate_rating" class="validate-rating" value="" />
+                        </div>
+
+
+
+                    </div>
+                <?php endif; ?>
+                <?php if ( $helperDetailedreview->checkFieldAvailable('sizing') ): ?>
+                <div class="sizing with-border">
+                    <div class="left">
+                        <span class="title"><?php echo $this->__("Sizing") ?> <em class="required">*</em></span>
+                        <p class="desc"><?php echo $this->__("select the option that reflects your feeling about the item's sizing") ?></p>
+                    </div>
+                    <div class="right">
+                        <div class="slider-wrapper">
+                            <div id="slider"></div>
+                            <ul class="sizing-ul">
+                            <?php $sizing = Mage::getSingleton('detailedreview/review_sizing'); ?>
+                            <?php $index = 0; ?>
+                            <?php $sizeSizing = $sizing->count(); ?>
+                            <?php $defaultSizing = $sizing->getDefaultSizing(); ?>
+                            <?php foreach ($sizing->getOptionArray() as $key => $sizing): $index++; ?>
+                                <li class="<?php if ($index==$sizeSizing): ?>last<?php elseif($index==1): ?>first<?php elseif($index==$defaultSizing): ?>middle<?php else: ?>hidden<?php endif; ?>">
+                                    <input type="radio" <?php if ($index==$defaultSizing): ?>checked="checked" <?php endif; ?> name="sizing" value="<?php echo $key ?>" class="radio" />
+                                    <span><?php echo $this->__($sizing) ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <span id="sizing-label"><?php echo $this->__("true to size") ?></span>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <div class="your-review">
+                    <div class="left">
+                        <span class="title"><?php echo $this->__("Your Review") ?> <em class="required">*</em></span>
+                    </div>
+                    <div class="right">
+                        <div class="wide">
+                            <span><label for="nickname_field" class="required"><?php echo $this->__('Nickname') ?> <em>*</em></label></span>
+                            <div class="input-box field-row">
+                                <input type="text" name="nickname" id="nickname_field" class="input-text required-entry" value="<?php echo $this->htmlEscape($data->getNickname()) ?>" />
+                            </div>
+                        </div>
+                        <div class="wide" style="display: none;">
+                            <span><label for="summary_field" class="required"><?php echo $this->__('Review Title:') ?> <em>*</em></label></span>
+                            <div class="input-box field-row">
+                                <input type="text" name="title" id="summary_field" class="input-text required-entry" value="<?php echo $this->htmlEscape('_') ?>" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="your-review overall with-border">
+                    <div class="left">
+
+                    </div>
+                    <div class="right">
+                        <div class="wide">
+                            <label for="review_field" class="required"><?php echo $this->__('Overall Review:') ?> <em>*</em></label>
+                            <div class="input-box field-row">
+                                <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry"><?php echo $this->htmlEscape($data->getDetail()) ?></textarea>
+                            </div>
+                        </div>
+                        <?php if ( $helperDetailedreview->checkFieldAvailable('good_and_bad_detail') ): ?>
+                        <div class="narrow first">
+                            <label for="goodreview_field"><?php echo $this->__('What do you like about this item?') ?></label>
+                            <div class="input-box">
+                                <textarea name="good_detail" id="goodreview_field" cols="5" rows="3"><?php echo $this->htmlEscape($data->getGoodDetail()) ?></textarea>
+                            </div>
+                        </div>
+                        <div class="narrow">
+                            <label for="nogoodreview_field"><?php echo $this->__('What do you dislike about this item?') ?></label>
+                            <div class="input-box">
+                                <textarea name="no_good_detail" id="nogoodreview_field" cols="5" rows="3"><?php echo $this->htmlEscape($data->getNoGoodDetail()) ?></textarea>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ( $helperDetailedreview->checkFieldAvailable('pros_and_cons') ):
+                            $consCollection = $this->getProsConsCollection(MageWorkshop_DetailedReview_Model_Source_EntityType::CONS);
+                            $prosCollection = $this->getProsConsCollection(MageWorkshop_DetailedReview_Model_Source_EntityType::PROS);
+                            $sql = (string) $prosCollection->getSelectSql();
+                        ?>
+                            <div class="narrow first">
+                                <?php if ($helperDetailedreview->checkFieldAvailable('user_pros_and_cons') || ($helperDetailedreview->checkFieldAvailable('pros_and_cons') && $prosCollection->getSize())): ?>
+                                    <label><?php echo $this->__('Pros:') ?></label>
+                                <?php endif; ?>
+
+                                <?php if ( $helperDetailedreview->checkFieldAvailable('user_pros_and_cons') ): ?>
+                                    <div class="input-box">
+                                        <textarea name="user_pros" id="user_goodreview_field" cols="5" rows="2"><?php echo $this->htmlEscape($data->getGoodDetail()) ?></textarea>
+                                    </div>
+                                    <div class="proscons">
+                                        <label class="proscons" for="user_goodreview_field"><?php echo $this->__('Enter your Pros, separated by comma') ?></label>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if ($prosCollection->getSize() && $helperDetailedreview->checkFieldAvailable('pros_and_cons') ): ?>
+                                    <?php if ($helperDetailedreview->checkFieldAvailable('user_pros_and_cons')): ?>
+                                        <label><?php echo $this->__('or choose from list:') ?></label>
+                                    <?php endif; ?>
+                                    <ul class="pros">
+                                    <?php foreach($prosCollection as $pros): ?>
+                                        <li><input type="checkbox" name="pros[]" value="<?php echo $pros->getEntityId(); ?>"/><?php echo $pros->getName(); ?></li>
+                                    <?php endforeach ?>
+                                    </ul>
+                                <?php endif; ?>
+                            </div>
+                            <div class="narrow">
+                                <?php if ($helperDetailedreview->checkFieldAvailable('user_pros_and_cons') || ($helperDetailedreview->checkFieldAvailable('pros_and_cons') && $prosCollection->getSize())): ?>
+                                    <label><?php echo $this->__('Cons:') ?></label>
+                                <?php endif; ?>
+
+                                <?php if ( $helperDetailedreview->checkFieldAvailable('user_pros_and_cons') ): ?>
+                                <div class="input-box">
+                                    <textarea name="user_cons" id="user_nogoodreview_field" cols="5" rows="2"><?php echo $this->htmlEscape($data->getNoGoodDetail()) ?></textarea>
+                                </div>
+                                <div class="proscons">
+                                    <label class="proscons" for="user_nogoodreview_field"><?php echo $this->__('Enter your Cons, separated by comma') ?></label>
+                                </div>
+                                <?php endif; ?>
+
+                                <?php if ($consCollection->getSize() && $helperDetailedreview->checkFieldAvailable('pros_and_cons') ): ?>
+                                    <?php if ($helperDetailedreview->checkFieldAvailable('user_pros_and_cons')): ?>
+                                        <label><?php echo $this->__('or choose from list:') ?></label>
+                                    <?php endif; ?>
+                                    <ul class="pros">
+                                        <?php foreach($consCollection as $cons): ?>
+                                        <li><input type="checkbox" name="cons[]" value="<?php echo $cons->getEntityId(); ?>"/><?php echo $cons->getName(); ?></li>
+                                        <?php endforeach ?>
+                                    </ul>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php if(Mage::getStoreConfig('detailedreview/social_share_optios/recommended_product') && $fieldVariableArr = Mage::getStoreConfig('detailedreview/social_share_optios/recommend_qty_available')): ?>
+                        <?php $fieldVariableArr = explode(',', $fieldVariableArr); ?>
+                        <div class="right">
+                            <label for="review_field"><?php echo $this->__('Would you recommend this product to a friend?') ?></label>
+                            <div class="input-box">
+                                <select class="recommendation" name="recommend_to">
+                                    <option value="" selected="selected"><?php echo $this->__('Please select'); ?></option>
+                                    <?php foreach ($fieldVariableArr as $option): ?>
+                                        <option value="<?php echo $option; ?>"><?php echo $option; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <?php if ( $helperDetailedreview->checkFieldAvailable('image') ): ?>
+                   <?php
+                    $maxSize = Mage::getStoreConfig('detailedreview/image_options/max_image_size');
+                    $minWidth = Mage::getStoreConfig('detailedreview/image_options/min_image_width');
+                    $minHeight = Mage::getStoreConfig('detailedreview/image_options/min_image_height');
+                    ?>
+                <div class="upload-image">
+                    <div class="left">
+                        <span class="title"><?php echo $this->__("Upload Your Image") ?></span>
+                    </div>
+                    <div class="right">
+                        <div class="input-box" id="add-file-input-box">
+                            <div class="more-images">
+                                <span>
+                                    <input type="file" name="image[]" id="image_field" class="firstInput" value="<?php echo $this->htmlEscape($data->getImage()) ?>" />
+                                    <a href="#" class="remove-img">Remove</a>
+                                </span>
+                            </div>
+                        </div>
+                        <?php if ((int)Mage::getStoreConfig('detailedreview/image_options/images_max_count') > 1): ?>
+                            <span class="more-images"><a href="#" id="add-more-images">Add More Files</a></span>
+                        <?php endif ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <?php if ( $helperDetailedreview->checkFieldAvailable('video') ): ?>
+                <div class="upload-video with-border">
+                    <div class="left">
+                        <span class="title"><?php echo $this->__("Attach Your Video") ?></span>
+                        <p class="desc"><?php echo $this->__("post your youtube video link to show how you style this item") ?></p>
+                    </div>
+                    <div class="right">
+                        <div class="wide">
+                            <label for="video_field"><?php echo $this->__('Attach Your Video') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="video" id="video_field" class="input-text" value="<?php echo $this->htmlEscape($data->getVideo()) ?>" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <?php if ( $helperDetailedreview->checkFieldAvailable('about_you') ): ?>
+                <div class="about-you with-border">
+                    <div class="left">
+                        <span class="title"><?php echo $this->__("About you") ?>:</span>
+                        <p class="desc"><?php echo $this->__("tell our customers about yourself") ?></p>
+                    </div>
+                    <div class="right">
+                        <div class="narrow first">
+                            <label for="location_field"><?php echo $this->__('Location') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="location" id="location_field" class="input-text" value="<?php echo $this->htmlEscape($data->getLocation()) ?>" />
+                            </div>
+                        </div>
+                        <div class="narrow">
+                            <div class="age">
+                                <label for="age_field"><?php echo $this->__('Your Age') ?></label>
+                                <div class="input-box">
+                                    <input type="text" name="age" id="age_field" class="input-text" value="<?php echo $this->htmlEscape($data->getAge()) ?>" />
+                                </div>
+                            </div>
+                            <div class="height">
+                                <label for="height_field"><?php echo $this->__('Your Height') ?></label>
+                                <div class="input-box">
+                                    <input type="text" name="height" id="height_field" class="input-text" value="<?php echo $this->htmlEscape($data->getHeight()) ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wide">
+                            <label><?php echo $this->__('Your Body Type') ?></label>
+                            <ul class="body-types">
+                                <?php $bodyTypes = Mage::getSingleton('detailedreview/review_bodyType')->getOptionArray(); ?>
+                                <?php foreach ($bodyTypes as $key => $bodyType):?>
+                                    <li>
+                                        <img class="body-type" alt="" src="<?php echo $this->getSkinUrl('images/detailedreview/bodytypes/'.$bodyType.'-shape.jpg');?>"/>
+                                        <input type="radio" name="body_type" value="<?php echo $key ?>" class="radio" />
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <?php if ($displayCaptcha): ?>
+                <div id="review-captcha">
+                <!--[if IE 7]>
+                    <script type="text/javascript"
+                            src="//www.google.com/recaptcha/api/challenge?k=<?php echo $public_key; ?>">
+                    </script>
+                    <noscript>
+                        <iframe src="//www.google.com/recaptcha/api/noscript?k=<?php echo $public_key; ?>"
+                                height="300" width="500" frameborder="0"></iframe><br>
+                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                        <input type="hidden" name="recaptcha_response_field"
+                               value="manual_challenge">
+                    </noscript>
+                <![endif]-->
+                </div>
+                <div class='captcha-error'></div>
+                <?php endif; ?>
+            </fieldset>
+            <div class="buttons-set">
+                <button type="submit" title="<?php echo $this->__('Submit') ?>" class="button">
+                    <span><span><?php echo $this->__('Submit') ?></span></span>
+                </button>
+                <span id="review-add-spinner" class="please-wait" style="display:none;">
+                    <img src="<?php echo $this->getSkinUrl('images/detailedreview/ajax-loader.gif') ?>" alt="<?php echo $this->__('Please, wait...') ?>" title="<?php echo $this->__('Please, wait...') ?>" class="v-middle" /> <?php echo $this->__('Please, wait...') ?>
+                </span>
+            </div>
+        </form>
+    <?php else: ?>
+        <p class="review-nologged" id="review-form">
+            <?php echo $this->__('Only registered users can write reviews. Please, <a href="%s">log in</a> or <a href="%s">register</a>', $this->getLoginLink(), Mage::helper('customer')->getRegisterUrl()) ?>
+        </p>
+    <?php endif ?>
+    </div>
+</div>
+
+<div class="review-dialog-submit-result" style="display: none;">
+</div>
+<script type="text/javascript">
+    var RecaptchaOptions = {
+        theme : 'clean'
+    };
+</script>
+<script type="text/javascript">
+    //<![CDATA[
+    document.observe("dom:loaded", function() {
+        (function($){
+            $.noConflict();
+            <?php if ($displayCaptcha): ?>
+                if(($.browser.msie && parseInt($.browser.version, 10) != 7) || !$.browser.msie) {
+                    Recaptcha.create("<?php echo $public_key; ?>",
+                            "review-captcha",
+                            {
+                                theme: "clean",
+                                callback: Recaptcha.focus_response_field
+                            }
+                    );
+                }
+                <?php endif; ?>
+                dataForm = new VarienForm('review-form');
+                if ($.browser.msie && $.browser.version=="9.0") {
+                    var dialog = $('.review-dialog-block');
+                    var el = $('#review-form input');
+                    el.focus(function(){
+                        dialog.css('height',dialog.height());
+                        dialog.css('height','auto');
+                    })
+                    el.blur(function(){
+                        dialog.css('height',dialog.height());
+                        dialog.css('height','auto');
+                    })
+                }
+
+                Validation.addAllThese(
+                        [
+                            ['validate-rating', '<?php echo $this->__('Please select one of each of the ratings above') ?>', function(v) {
+                                var trs = $('product-review-table').select('tr');
+                                var inputs;
+                                var error = 1;
+
+                                for( var j=0; j < trs.length; j++ ) {
+                                    var tr = trs[j];
+                                    if( j > 0 ) {
+                                        inputs = tr.select('input');
+
+                                        for( i in inputs ) {
+                                            if( inputs[i].checked == true ) {
+                                                error = 0;
+                                            }
+                                        }
+
+                                        if( error == 1 ) {
+                                            return false;
+                                        } else {
+                                            error = 1;
+                                        }
+                                    }
+                                }
+                                return true;
+                            }]
+                        ]
+                );
+
+            <?php if ( $helperDetailedreview->checkFieldAvailable('sizing') ): ?>
+                if (typeof(window.DRsliderLoaded) === 'undefined') {
+                    window.DRsliderLoaded = true;
+                    $("#slider").noUiSlider('init', {
+                        handles: 1,
+                        handel: 0,
+                        connect: false,
+                        scale: [0,6],
+                        value: [0,3],
+                        start: 3,
+                        step: 1,
+                        change: function() { newchangeSizing($(this).noUiSlider('value')[0]); }
+                    });
+
+                    function newchangeSizing(value) {
+                        $('#sizing-label').html($('[name=sizing]').eq(value).attr('checked',true).next().html());
+                    }
+                }
+                <?php endif; ?>
+                $(".overall-raiting ul li").click(
+                        function(){
+                            var tthis = this;
+                            var $li = $(tthis).parent().children('li');
+                            $li.removeClass('active');
+                            $li.each(function(){
+                                $(this).addClass('active');
+                                if ( tthis == this ) return false;
+                            })
+                            $(this).find('input.radio').attr('checked',true);
+                        }
+                );
+
+        })(DRjQuery)
+    });
+    //]]>
+</script>

@@ -1,0 +1,154 @@
+.am_images_grid .am_item
+{
+    float: left;
+    margin-right: 30px;
+    margin-bottom: 30px;
+    padding: 0px 10px 10px 10px;
+    background-color: #fff9e9;
+    border: 1px dotted white;
+}
+
+.am_images_grid .img-disabled
+{
+    background-color: #f5f5f5;
+    filter:alpha(opacity=25);
+    opacity:0.25;
+}
+
+.am_images_grid .img-disabled:hover
+{
+    background-color: #f5f5f5;
+    filter:alpha(opacity=80);
+    opacity:0.8;
+}
+
+.am_images_grid .am_item:hover
+{
+    border: 1px dotted #dfdfdf;
+}
+
+.am_images_grid .am_label
+{
+    padding-top: 6px;
+}
+
+.am_images_grid .am_label input
+{
+    width: 146px;
+    background-image: url(label.png);
+    background-repeat: no-repeat;
+    background-position: bottom right;
+}
+
+.am_images_grid .am_types
+{
+    padding-top: 6px;
+    padding-left: 10px;
+}
+
+.am_images_grid .am_image img
+{
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+.am_images_grid .am_image
+{
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    border: 1px solid #f1f1f1;
+    position: relative;
+    padding: 0px;
+    line-height: 150px;
+    background-color: white;
+}
+
+.am_images_grid .moveable
+{
+    height: 20px;
+    cursor: move;
+}
+
+.am_images_grid .moveable:hover
+{
+    background-image: url(move.png);
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+.am_images_grid .actions
+{
+    padding-top: 4px;
+}
+
+.am_images_grid .actions .delete
+{
+    color: red;
+}
+
+.am_images_grid .img-disabled .enable
+{
+    display: inline;
+}
+
+.am_images_grid .img-disabled .disable
+{
+    display: none;
+}
+
+.am_images_grid .enable
+{
+    display: none;
+}
+
+.am_images_grid .disable
+{
+    display: inline;
+}
+
+.am_images_grid .actions .disable
+{
+    color: #878787;
+}
+
+.am_images_grid .actions .enable
+{
+    color: #279531;
+}
+
+#upload_tracking_area
+{
+    padding: 20px;
+}
+
+#upload_tracking_area .file
+{
+    clear: left;
+    padding-top: 6px;
+}
+
+#upload_tracking_area .progress
+{
+    width: 300px;
+    float: left;
+    border: 1px solid #eee2be;
+}
+
+#upload_tracking_area .progress-bar
+{
+    background-color: #6bbc66;
+}
+
+#upload_tracking_area .file-name
+{
+    float: left;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+#upload_tracking_area .file-percentage
+{
+    float: left;
+}

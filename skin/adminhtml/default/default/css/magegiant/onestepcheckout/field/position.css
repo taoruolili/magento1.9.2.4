@@ -1,0 +1,118 @@
+/*
+	Stylesheet for examples by DevHeart.
+	http://devheart.org/
+
+	Article title:	jQuery: Customizable layout using drag n drop
+	Article URI:	http://devheart.org/articles/jquery-customizable-layout-using-drag-and-drop/
+
+	Example title:	1. Getting started with sortable lists
+	Example URI:	http://devheart.org/examples/jquery-customizable-layout-using-drag-and-drop/1-getting-started-with-sortable-lists/index.html
+*/
+
+/*
+	Alignment
+------------------------------------------------------------------- */
+/* Floats */
+
+.clear, .clearer {
+    clear: both;
+}
+
+.clearer {
+    display: block;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+}
+.field-wrapper .field ul .suggest-position{
+    height: 40px;
+    float: left;
+    width: 48%;
+    background: #ccc;
+    margin: 1%;
+    padding: 0;
+}
+/*
+------------------------------------------------------------------- */
+
+/* General */
+
+.column {
+    width: 45%;
+
+}
+.field-wrapper .field {
+    background: #fafafa;
+    width: 100%;
+    display: block;
+    text-align: center;
+    min-height: 50px;
+}
+
+.field-wrapper .field ul {
+    display: inline-block;
+    padding: 2% 0;
+    width: 100%;
+
+}
+
+.field-wrapper .field ul li {
+    float: left;
+    margin: 1%;
+    width: 48%;
+}
+.field-wrapper .field ul li .attribute-label{
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px 10px;
+    cursor: move;
+    background: #fff;
+}
+/*Billing field*/
+.billing-wrapper .field ul li.wide{
+    width: 98%;
+}
+/* Containment area */
+
+#containment {
+    padding-right: 50px;
+}
+
+/* Item placeholder (visual helper) */
+
+.placeholder {
+    background-color: #BFB;
+    border: 1px dashed #666;
+    height: 58px;
+    margin-bottom: 5px;
+}
+
+.ui-resizable-border {
+    border: 1px dotted #ccc;
+}
+
+.onestep-title {
+    background-position: 12px 12px;
+    background-repeat: no-repeat;
+    padding: 10px;
+}
+
+.onestep-title h2 {
+    margin: 0 0 0 35px;
+}
+
+.onestep-title.available h2 {
+    margin: 0 0 0 20px;
+}
+
+.onestep-title.billing-title {
+    background-image: url(images/billing_title.png);
+}
+
+.onestep-title.available {
+    background-image: url(images/next.png);
+}
+
+.billing-address .ui-icon {
+    background-image: url(images/ui-icons_222222_256x240.png);
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+    <name>trackorder_module</name>
+    <version>0.1.5</version>
+    <stability>devel</stability>
+    <license uri="http://opensource.org/licenses/osl-3.0.php">OSL v3.0</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>trackorder</summary>
+    <description>trackorder</description>
+    <notes>supee patch 6788</notes>
+    <authors><author><name>Biztech</name><user>biztechcon</user><email>sales@biztechconsultancy.com</email></author></authors>
+    <date>2016-03-15</date>
+    <time>06:34:09</time>
+    <contents><target name="magelocal"><dir name="Biztech"><dir name="Trackorder"><dir name="Block"><file name="Trackorder.php" hash="e50a5a3be035ac2c55cf50e76af03601"/><file name="Trackwidget.php" hash="2c0acfa5b09c216ef4907a88afba4050"/><file name="View.php" hash="0c65f7bd839db3f2588f05466c61f279"/></dir><dir name="Helper"><file name="Data.php" hash="ca4d65b28c67e74f8bdf05bb58a47a73"/></dir><dir name="Model"><file name="Observer.php" hash="75b9f3f4d6480c27e1872c180b979e3a"/><dir name="System"><dir name="Config"><dir name="Frontend"><file name="Widgetsettings.php" hash="30f5a6e8fc3a8856e289890fa11247c1"/></dir></dir></dir></dir><dir name="controllers"><file name="IndexController.php" hash="81f8391c0c6aeab5789ae002b9803e4b"/></dir><dir name="etc"><file name="config.xml" hash="44446a11535997933f8c1afbc5a73804"/><file name="system.xml" hash="4d6c933b47575ed0ff7ffed6c6bd7608"/><file name="widget.xml" hash="ff61595a908d0ce4c846f5b330ce5dd7"/></dir><dir name="sql"><dir name="trackorder_setup"><file name="mysql4-install-0.1.0.php" hash="47c62d342c96c4628c2da5c2e3dafacf"/><file name="mysql4-upgrade-0.1.0-0.1.1.php" hash="4f08e9d298368363dcf13fd0a9cc9eb8"/><file name="mysql4-upgrade-0.1.3-0.1.4.php" hash="3b08d40b8e1ae6a359334bd162d087ba"/></dir></dir></dir></dir></target><target name="magedesign"><dir name="frontend"><dir name="default"><dir name="default"><dir name="layout"><file name="trackorder.xml" hash="7d81b1e199c97dff44d9502917d49514"/></dir><dir name="template"><dir name="trackorder"><file name="info.phtml" hash="592dd505f0bb03cb19017d55120b51a2"/><dir name="order"><file name="items.phtml" hash="1953cc2fb3cad9c24af8f2238c1454fb"/></dir><dir name="shipment"><file name="items.phtml" hash="bf1301921046e9416adc8968c6a0609e"/></dir><file name="trackdetail.phtml" hash="6f515a0db9ad081b71b9297a743b0ff8"/><file name="trackorder.phtml" hash="2939541a8537a23c78cbe5f1ed49f824"/><file name="trackorderlink.phtml" hash="55338259c837d10814a56ed3d6cc1d02"/><file name="trackwidget.phtml" hash="78d940b9765d109236c24ed6d95fdb22"/><file name="view.phtml" hash="71f72f80ecf948a65cba97cbd7ce7e26"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Biztech_Trackorder.xml" hash="b81eefbec619714c203ea48b08569cf9"/></dir></target><target name="mageskin"><dir name="frontend"><dir name="default"><dir name="default"><dir name="trackorder"><dir name="css"><file name="trackorder.css" hash="9bfecdaa1cf87a42f67f642dc865bea6"/></dir><dir name="images"><file name="ajax-loader-tr.gif" hash="1ae32bc8232ff2527c627e5b38eb319a"/><file name="ajax-loader.gif" hash="57ca1a2085d82f0574e3ef740b9a5ead"/><file name="i-trackorder.png" hash="65f5d4dbeafa21878e487859e29b0453"/><file name="main-bg.png" hash="615e539beac7fc4ad7b6aa7e519ca2ee"/></dir></dir></dir></dir></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.1.0</min><max>6.0.0</max></php></required></dependencies>
+</package>

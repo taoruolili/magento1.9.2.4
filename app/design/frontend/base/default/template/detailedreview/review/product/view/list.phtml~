@@ -1,0 +1,195 @@
+<?php
+    $_items = $this->getReviewsCollection()->getItems();
+    $isCustomerLogged = $this->helper('customer')->isLoggedIn();
+    $customerId = $isCustomerLogged ? $this->helper('customer')->getCustomer()->getId() : null;
+    $isGuestAllowToWrite = $this->helper('review')->getIsGuestAllowToWrite();
+    if (!$isCustomerLogged){
+        $helperUrl = $this->helper('core/url');
+        $url = Mage::getBaseUrl().'/detailedreview/helpful/vote/';
+    }
+    $helperDetailedreview = $this->helper('detailedreview');
+
+    /*
+     * @int21h
+     * removes the unwanted URL of the video line
+     */
+    function checkVideoUrl($videoId = NULL) {
+        if($videoId === null) return null;
+        $withDrawn = array('http://', 'youtu.be/');
+        $newUrl = str_replace($withDrawn, '', $videoId);
+        return $newUrl;
+    }
+?>
+<div class="box-collateral box-reviews" id="customer-reviews">
+    <?php if (count($_items)):?>
+        <?php echo $this->getChildHtml('toolbar') ?>
+        <?php $reviewSizing = Mage::getSingleton('detailedreview/review_sizing'); ?>
+        <?php $reviewBodyType = Mage::getSingleton('detailedreview/review_bodyType'); ?>
+        <?php foreach ($_items as $keyReview => $_review):?>
+            <div class="review-hr"></div>
+            <div class="review-dt">
+                <span class="nickname"><?php echo $this->__($this->htmlEscape($_review->getNickname())) ?></span>
+                <small class="date"><?php echo $this->__('%s', $this->formatDate($_review->getCreatedAt())) ?></small>
+                <small class="date"><?php echo $this->__('%s', $this->formatTime($_review->getCreatedAt(), 'medium')) ?></small>
+                <?php $ownership = $_review->getOwnership(); ?>
+                <?php $isAllowAboutYou = $helperDetailedreview->checkFieldAvailable('about_you'); ?>
+                <?php if ( $isAllowAboutYou || $ownership ): ?>
+                <ul>
+                <?php if ( $isAllowAboutYou ): ?>
+                    <?php if ( $location = $_review->getLocation() ):?>
+                    <li><label class="label-review-attr"><?php echo $this->__('Location') ?>:</label><div class="value-review-attr"><?php echo $location; ?></div></li>
+                    <?php endif;?>
+                    <?php if ( $age = $_review->getAge() ):?>
+                    <li><label class="label-review-attr left"><?php echo $this->__('Age') ?>:&nbsp;</label><div class="value-review-attr left"><?php echo $age; ?></div></li>
+                    <?php endif;?>
+                    <?php if ( $height = $_review->getHeight() ):?>
+                    <li><label class="label-review-attr left"><?php echo $this->__('Height') ?>:&nbsp;</label><div class="value-review-attr left"><?php echo $height; ?></div></li>
+                    <?php endif;?>
+                    <?php if ( $bodyType = $_review->getBodyType() ):?>
+                    <li><label class="label-review-attr"><?php echo $this->__('Body Type') ?>:</label><div class="value-review-attr"><img class="body-type" alt="" src="<?php echo $this->helper('detailedreview')->getResizedImage( $this->getSkinUrl('images/detailedreview/bodytypes/'.$reviewBodyType->getOptionValue($bodyType).'-shape.jpg' ),'',70); ?>"/></div></li>
+                    <?php endif;?>
+                <?php endif;?>
+                <?php if ($ownership):?>
+                    <li><label class="label-review-attr"><?php echo $this->__('Ownership') ?>:</label><div class="value-review-attr"><?php echo $ownership;?></div></li>
+                <?php endif;?>
+                </ul>
+                <?php endif;?>
+            </div>
+            <div class="review-dd">
+                <div class="header-reviews">                    
+                    <?php $_votes = $_review->getRatingVotes(); ?>
+                    <?php if ( $countVotes = count($_votes) ): ?>
+                    <table class="ratings-table">
+                        <col />
+                        <col />
+                        <tbody>
+                            <?php foreach ($_votes as $_vote): ?>
+                            <tr>
+                                <?php if ( $countVotes > 1 ): ?>
+                                <td>
+                                    <?php echo $this->__($_vote->getRatingCode()); ?>
+                                </td>
+                                <?php endif; ?>
+                                <td>
+                                    <div class="rating-box">
+                                        <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php endif; ?>
+                </div>
+                <?php if ( $helperDetailedreview->checkFieldAvailable('image') ):
+                    if ( isset($newImageUrl) ) unset ($newImageUrl);
+                    if ( $image = str_replace('\\','/',$_review->getImage()) )
+                        $newImageUrl = $this->helper('detailedreview')->getResizedImage(Mage::getBaseUrl().$image,100,100);
+                    if ( isset($newImageUrl) && $newImageUrl ): ?>
+                        <div class="image-review">
+                            <a class="jqueryLightbox" href="/<?php echo $image;?>" >
+                                <img src="<?php echo $newImageUrl;?>" alt=""/>
+                            </a>
+                            <div>click for full-size image</div>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <div class="title"><?php echo nl2br($this->htmlEscape($_review->getTitle())) ?></div>
+                <?php if ( ( $helperDetailedreview->checkFieldAvailable('sizing') ) && ($sizing = $_review->getSizing()) ):?>
+                    <div class="sizing">
+                        <label class="label-review-attr"><?php echo $this->__('Sizing') ?>:</label>
+                        <div class="value-review-attr">
+                            <div><?php echo $reviewSizing->getOptionValue($sizing) ?></div>
+                            <div class="sizing-bar">
+                                <div style="width:<?php echo $reviewSizing->getOptionWidth($sizing) ?>%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif;?>
+                <div class="review-wrapper">
+                    <ul>
+                        <?php if ( $detail = $_review->getDetail() ):?>
+                            <li><div class="value-review-attr"><?php echo nl2br($detail) ?></div></li>
+                        <?php endif;?>
+                    <?php if ( $helperDetailedreview->checkFieldAvailable('pros_and_cons_detail') ): ?>
+                        <?php if ($goodDetail = $_review->getGoodDetail()):?>
+                        <li><label class="label-review-attr"><?php echo $this->__('Pros') ?>:</label><div class="value-review-attr"><?php echo nl2br($goodDetail) ?></div></li>
+                        <?php endif;?>
+                        <?php if ( $noGoodDetail = $_review->getNoGoodDetail() ):?>
+                        <li><label class="label-review-attr"><?php echo $this->__('Cons') ?>:</label><div class="value-review-attr"><?php echo nl2br($noGoodDetail) ?></div></li>
+                        <?php endif;?>
+                    <?php endif;?>
+                        <?php if ( $helperDetailedreview->checkFieldAvailable('response') && ($response = $_review->getResponse()) ):?>
+                        <li><label class="label-review-attr"><?php echo $this->__('Manufacture Response') ?>:</label><div class="value-review-attr"><?php echo nl2br($response) ?></div></li>
+                        <?php endif;?>
+                        <?php if ( $helperDetailedreview->checkFieldAvailable('video') && ($videoId = $_review->getVideo()) ):?>
+			<?php $chkVideoId = checkVideoUrl($videoId); ?>
+                        <li><div><div class="video-review" onclick="showVideo('<?php echo $chkVideoId; ?>')"><span>watch my video</span></div></div></li>
+                        <?php endif;?>
+                    </ul>
+                </div>
+                <div class="clearer"></div>
+                <div class="helpful-block">
+                    <form action="/detailedreview/helpful/vote" method="post" >
+                        <div>                        
+                            <input type="hidden" name="review_id" value="<?php echo $_review->getId()?>"/>
+                            <?php $isCustomerVoted = $_review->getIsCustomerVoted(); ?>
+                            <?php $isCustomerOwner = !is_null($customerId) && $customerId == $_review->getCustomerId(); ?>
+                            <?php if ( $allVotes = $_review->getCountUnhelpful() + $_review->getCountHelpful() ): ?>
+                                <div class="helpful-info"><?php echo $_review->getCountHelpful() ?> <?php echo $this->__('of') ?> <?php echo $allVotes ?> <?php echo $this->__('found this review helpful') ?>.</div>
+                                <?php if ( (!$isCustomerLogged) || ($isCustomerLogged && !$isCustomerVoted && !$isCustomerOwner) ): ?>
+                                    <span class="helpful-question"><?php echo $this->__('Was this review helpful?') ?></span>
+                                <?php endif; ?>
+                            <?php elseif (!$isCustomerOwner): ?>
+                                <span class="helpful-question"><?php echo $this->__('Was this review helpful?') ?></span>
+                            <?php endif;?>
+                            <?php if ( !$isCustomerLogged ) :?>
+                                <?php $redirectUrl = $url . '?review_id='.$_review->getId().'&is_helpful=1'; ?>
+                                <input type="hidden" value="<?php echo htmlspecialchars($redirectUrl); ?>" />
+                                <input type="hidden" class="is_helpful" value="<?php echo $helperUrl->getEncodedUrl($redirectUrl);?>" />
+                                <button onclick="return false;" type="button" name="is_helpful" value="1"><?php echo $this->__('yes') ?></button>
+                                <span>&nbsp;|&nbsp;</span>
+                                <?php $redirectUrl = $url . '?review_id='.$_review->getId().'&is_helpful=0'; ?>
+                                <input type="hidden" value="<?php echo htmlspecialchars($redirectUrl); ?>" />
+                                <input type="hidden" class="not_helpful" value="<?php echo $helperUrl->getEncodedUrl($redirectUrl); ?>" />
+                                <button onclick="return false;" type="button" name="is_helpful" value="0"><?php echo $this->__('no') ?></button>
+                            <?php else:?>
+                                <?php if (!$isCustomerVoted && !$isCustomerOwner):?>
+                                    <button type="submit" name="is_helpful" value="1"><?php echo $this->__('yes') ?></button>&nbsp;|&nbsp;
+                                    <button type="submit" name="is_helpful" value="0"><?php echo $this->__('no') ?></button>
+                                <?php endif;?>
+                            <?php endif;?>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        <div class="clearer"></div>
+        <?php echo $this->getChildHtml('toolbar') ?>
+    <?php else:
+            if($this->_getReviewsCountWithoutFilters())
+                echo $this->getMessagesBlock()->addNotice("Sorry, no reviews matched your criteria.")->_toHtml();
+        endif;
+    ?>
+    <?php if ( !$isCustomerLogged ):?>
+    <div class="login-dialog-block" style="display: none;">
+        <div class="login-dialog-container">
+        <?php echo $this->getChildHtml('customer_form_login');?>
+        <?php echo $this->getChildHtml('customer_form_register');?>
+        </div>
+        <div class="clearer"></div>
+    </div>
+    <?php endif;?>
+    <?php if ( $isGuestAllowToWrite || $isCustomerLogged ):?>
+    <div class="review-dialog-block" style="display: none;">
+    <?php echo $this->getChildHtml('review_form') ?>
+    </div>
+    <?php endif;?>
+    <div class="clearer"></div>
+</div>
+<script type="text/javascript" src="/js/swfobject/swfobject.js"></script>
+<div id="ytapiplayer-dialog">
+    <div id="ytapiplayer">
+        You need Flash player 8+ and JavaScript enabled to view this video.
+    </div>
+</div>

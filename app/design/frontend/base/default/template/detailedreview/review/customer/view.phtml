@@ -1,0 +1,128 @@
+<?php
+/**
+ * MageWorkshop
+ * Copyright (C) 2012  MageWorkshop <mageworkshophq@gmail.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * @category   MageWorkshop
+ * @package    MageWorkshop_DetailedReview
+ * @copyright  Copyright (c) 2012 MageWorkshop Co. (http://mage-workshop.com)
+ * @license    http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPL-3.0)
+ * @author     MageWorkshop <mageworkshophq@gmail.com>
+ */
+
+if($this->getProductData()->getId()):
+?>
+<div class="product-review">
+    <div class="page-title">
+        <h1><?php echo $this->__('Review Details') ?></h1>
+    </div>
+    <div class="product-img-box">
+        <a href="<?php echo $this->getProductData()->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductData()->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($this->getProductData(), 'small_image')->resize(125, 125); ?>" width="125" height="125" alt="<?php echo $this->htmlEscape($this->getProductData()->getName()) ?>" /></a>
+        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+            <p class="label"><?php echo $this->__('Average Customer Rating:') ?></p>
+            <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
+        <?php endif; ?>
+    </div>
+    <div class="product-details">
+        <h2 class="product-name"><?php echo $this->htmlEscape($this->getProductData()->getName()) ?></h2>
+        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+        <h3><?php echo ($this->isReviewOwner()) ? $this->__('Your Rating:') : $this->__('Rating:'); ?></h3>
+        <table class="ratings-table">
+        <?php foreach ($this->getRating() as $_rating): ?>
+        <?php if($_rating->getPercent()): ?>
+            <tr>
+                <th><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></th>
+                <td>
+                    <div class="rating-box">
+                        <div class="rating" style="width:<?php echo ceil($_rating->getPercent()) ?>%;"></div>
+                    </div>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        </table>
+        <?php endif; ?>
+        <dl>
+            <dt>
+                <?php if ($this->isReviewOwner()): ?>
+                    <?php echo $this->__('Your Review (submitted on %s):', $this->dateFormat($this->getReviewData()->getCreatedAt())) ?>
+                <?php else :?>
+                    <?php echo $this->__('Review (submitted on %s):', $this->dateFormat($this->getReviewData()->getCreatedAt())) ?>
+                <?php endif;?>
+            </dt>
+            <dd>
+                <div class="review-wrapper">
+                    <?php
+                        $_review = $this->getReviewData();
+                        $goodDetail = $_review->getGoodDetail();
+                        $noGoodDetail = $_review->getNoGoodDetail();
+                        $detail = $_review->getDetail();
+                        $response = $_review->getResponse();
+                    ?>
+                    <?php if ($image = $_review->getImage()):?>
+                        <script type="text/javascript">
+                            (function($){
+                                $(document).ready(function(){
+                                    $('.jqueryLightbox').lightBox({
+                                        imageLoading: '<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-ico-loading.gif'); ?>',
+                                        imageBtnPrev: '<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-btn-prev.gif'); ?>',
+                                        imageBtnNext: '<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-btn-next.gif'); ?>',
+                                        imageBtnClose:'<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-btn-close.gif'); ?>',
+                                        imageBlank:   '<?php echo $this->getSkinUrl('images/detailedreview/lightbox/lightbox-blank.gif'); ?>'
+                                    });
+                                })
+                                $(document).keyup(function(e){
+                                    if(e.which == 27){
+                                        jQuery("#jquery-lightbox").fadeOut("slow");
+                                        jQuery("#jquery-overlay").fadeOut("slow");
+                                    }
+                                });
+                            })(DRjQuery)
+                        </script>
+                        <?php
+                         // get image name
+                         $imageName = substr(strrchr($image,"/"),1);
+
+                         // resized image path (media/catalog/category/resized/IMAGE_NAME)
+                         $imageResized = Mage::getBaseDir('media') . "reviews/resized/" . $imageName;
+
+                         if (!file_exists($imageResized)&&file_exists($image)) :
+                             $imageObj = new Varien_Image($image);
+                             $imageObj->constrainOnly(TRUE);
+                             $imageObj->keepAspectRatio(TRUE);
+                             $imageObj->keepFrame(FALSE);
+                             $imageObj->resize(100, 100);
+                             $imageObj->save($imageResized);
+                         endif;
+                         $newImageUrl = Mage::getBaseUrl('media')."reviews/resized/".$imageName;
+                        ?>
+                        <div class="image-review"><a class="jqueryLightbox" href="/<?php echo $image;?>" ><img src="<?php echo $newImageUrl;?>" alt=""/></a></div>
+                    <?php endif;?>
+                </div>
+                <?php if ($goodDetail):?><p><strong><?php echo $this->__('Pros:') ?></strong><?php echo nl2br($goodDetail) ?></p><?php endif;?>
+                <?php if ($noGoodDetail):?><p><strong><?php echo $this->__('Cons:') ?></strong><?php echo nl2br($noGoodDetail) ?></p><?php endif;?>
+                <?php if ($detail):?><p><strong><?php echo $this->__('Other Thoughts:') ?></strong><?php echo nl2br($detail) ?></p><?php endif;?>
+                <?php if ($response):?><p><strong><?php echo $this->__('Administration Response:') ?></strong><?php echo nl2br($response) ?></p><?php endif;?>
+            </dd>
+        </dl>
+    </div>
+    <div class="buttons-set">
+        <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->__('Back to My Reviews') ?></a></p>
+    </div>
+</div>
+<?php endif; ?>

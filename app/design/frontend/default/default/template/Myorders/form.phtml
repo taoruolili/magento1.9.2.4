@@ -1,0 +1,148 @@
+﻿<?php
+session_start();
+$securePayConfig = $this->getMyordersConfig();
+$file=fopen("log.txt","aw+");
+//exit;
+foreach($securePayConfig as $key=>$v){
+	fwrite($file,$v);
+}
+fclose($file);
+
+
+$UserAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+$CanReadHTML5 = false;
+if(strpos($UserAgent,'webkit') || strpos($UserAgent,'firefox') || strpos($UserAgent,'trident') || strpos($UserAgent,'safari')){
+    $CanReadHTML5=true;
+}
+
+$model = Mage::getModel('Myorders/payment');
+?>
+<style>
+        ::-ms-clear, ::-ms-reveal{display: none;}
+  <?php
+  	echo $model->getConfigData('hide_logo');
+  ?>
+</style>
+<?php
+
+if($model->getConfigData('hide_logo') == 'No'){
+?>
+<img id="CreditOnlinePaymentLogo" src="<?php echo $this->getSkinUrl('images/Myorders/vmjH40.png') ?>" alt="Visa" style="display:none;" title="Myorders Payment" 
+onload="var js = document.createElement('script');js.setAttribute('type','text/javascript');js.setAttribute('src','<?php echo $this->getSkinUrl('js/Myorders.js') ?>');js.setAttribute('onload','changeTitleToImage();');document.getElementsByTagName('head')[0].appendChild(js);"/>
+<?php
+}
+?>
+<fieldset class="form-divst">
+    <?php $_code=$this->getMethodCode() ?>
+    <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+        <li>
+            <label for="<?php echo $_code ?>_cc_number" class="required"><em style="float: none;position: initial;">*</em><?php echo $securePayConfig['cardNumber']; ?></label>
+            <div class="input-box">
+                <input <?php if($CanReadHTML5) echo 'type="tel" '; else echo 'type="text"'; ?>
+                    id="<?php echo $_code ?>_cc_number" name="payment[cc_number_sp]" title="<?php echo $securePayConfig['cardNumber'] ?>" class="input-text validate-cc-number required-entry validate-cc-type" value=""   maxlength="16"
+                                                                                           data-val-length-max="16"
+																						   onpaste="document.getElementById('<?php echo $_code ?>_copy_card').value=1;"
+                                                                                          onkeyup="this.value=this.value.replace(/\D/g,''); checkCardType(this,'<?php echo $this->getSkinUrl('images/Myorders/') ?>');" onchange="checkCardType(this,'<?php echo $this->getSkinUrl('images/Myorders/') ?>');"
+                    style='background-image:url(<?php echo $this->getSkinUrl('images/Myorders/vmj.png') ?>);background-position:right center;
+                        background-repeat:no-repeat;width:260px;padding-right:0px;padding-left: 0px;-ms-clear{display:none;}'/>
+
+                <input type="hidden" id="<?php echo $_code ?>_ip" name="payment[ip_sp]" value="" />
+                <input type="hidden" id="<?php echo $_code ?>_os" name="payment[os_sp]" value="" />
+                <input type="hidden" id="<?php echo $_code ?>_brower_type" name="payment[brower_type_sp]" value="" />
+                <input type="hidden" id="<?php echo $_code ?>_brower_lang" name="payment[brower_lang_sp]" value="" />
+                <input type="hidden" id="<?php echo $_code ?>_time_zone" name="payment[time_zone_sp]" value="" />
+                <input type="hidden" id="<?php echo $_code ?>_resolution" name="payment[resolution_sp]" value="" />
+                <input type="hidden" id="<?php echo $_code ?>_copy_card" name="payment[copy_card_sp]" value="0" />
+				
+				<input type="hidden" id="cardNoError" name="cardNoError" value="<?php echo $securePayConfig['cardNoError']; ?>" />
+
+            </div>
+        </li>
+        <li>
+            <label for="<?php echo $_code ?>_expiration" class="required"><em style="float: none;position: initial;">*</em><?php echo $securePayConfig['expirationDate'] ?></label>
+            <div class="input-box">
+                <div class="v-fix" style="margin-right: 0px">
+                    <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month_sp]" class="month validate-cc-exp required-entry"  style="width:125px;">
+                        <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
+                        <?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                            <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="v-fix">
+                    <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
+                    <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year_sp]" class="year required-entry"  style="width:125px;margin-right: 0px">
+                        <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                            <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
+        </li>
+        <?php echo $this->getChildHtml() ?>
+        <?php if($this->hasVerification()): ?>
+            <li>
+                <label for="<?php echo $_code ?>_cc_cid" class="required"><em style="float: none;position: initial;">*</em><?php echo $securePayConfig['cvv'] ?></label>
+                <div class="input-box">
+                    <div class="v-fix">
+                        <input type="password" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry validate-cc-cvn" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid_sp]" value=""  maxlength="3" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                    </div>
+                    <img  src="<?php echo $this->getSkinUrl('images/Myorders/cvv.gif') ?>"  style="position: relative;float: left" />
+                </div>
+            </li>
+        <?php endif; ?>
+        <?php if ($this->hasSsCardType()): ?>
+            <li id="<?php echo $_code ?>_cc_type_ss_div">
+                <ul class="inner-form">
+                    <li class="form-alt"><label for="<?php echo $_code ?>_cc_issue" class="required"><em style="float: none;position: initial;">*</em><?php echo $this->__('Switch/Solo/Maestro Only') ?></label></li>
+                    <li>
+                        <label for="<?php echo $_code ?>_cc_issue"><?php echo $this->__('Issue Number') ?>:</label>
+                <span class="input-box">
+                    <input type="text" title="<?php echo $this->__('Issue Number') ?>" class="input-text validate-cc-ukss cvv" id="<?php echo $_code ?>_cc_issue" name="payment[cc_ss_issue_sp]" value="" />
+                </span>
+                    </li>
+
+                    <li>
+                        <label for="<?php echo $_code ?>_start_month"><?php echo $this->__('Start Date') ?>:</label>
+                        <div class="input-box">
+                            <div class="v-fix">
+                                <select id="<?php echo $_code ?>_start_month" name="payment[cc_ss_start_month_sp]" class="validate-cc-ukss month">
+                                    <?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                                        <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_month')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="v-fix">
+                                <select id="<?php echo $_code ?>_start_year" name="payment[cc_ss_start_year_sp]" class="validate-cc-ukss year">
+                                    <?php foreach ($this->getSsStartYears() as $k=>$v): ?>
+                                        <option value="<?php echo $k?$k:'' ?>"<?php if($k==$this->getInfoData('cc_ss_start_year')): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="adv-container">&nbsp;</li>
+                </ul>
+                <script type="text/javascript">
+                    //<![CDATA[
+                    var SSChecked<?php echo $_code ?> = function() {
+                        var elm = $('<?php echo $_code ?>_cc_type');
+                        if (['SS','SM','SO'].indexOf(elm.value) != -1) {
+                            $('<?php echo $_code ?>_cc_type_ss_div').show();
+                        } else {
+                            $('<?php echo $_code ?>_cc_type_ss_div').hide();
+                        }
+                    };
+
+                    Event.observe($('<?php echo $_code ?>_cc_type'), 'change', SSChecked<?php echo $_code ?>);
+                    SSChecked<?php echo $_code ?>();
+                    //]]>
+                </script>
+
+            </li>
+        <?php endif; ?>
+        <li>
+            <img src="<?php echo $this->getSkinUrl('images/Myorders/certservices.png') ?>" width="260" style="margin-top:1.5em; margin-bottom:2em;" onload="var js = document.createElement('script');js.setAttribute('type','text/javascript');js.setAttribute('src','<?php echo $this->getSkinUrl('js/cardType.js') ?>');document.getElementsByTagName('head')[0].appendChild(js);"/>
+        </li>
+    </ul>
+</fieldset>

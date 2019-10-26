@@ -1,0 +1,53 @@
+<?php
+/**
+ * Magegiant
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magegiant.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magegiant.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magegiant
+ * @package     Magegiant_Onestepcheckout
+ * @copyright   Copyright (c) 2014 Magegiant (http://www.magegiant.com/)
+ * @license     http://www.magegiant.com/license-agreement.html
+ */
+?><?php if ($this->canShow() && $this->isEnabledPointsBlock()): ?>
+    <div id="one-step-checkout-review-enterprise-points" class="block-wrapper">
+        <?php if ($this->isEnabledPointsBlock()): ?>
+            <div class="enterprise-points-message-container" style="overflow:hidden;height:0px;"></div>
+        <?php
+        $summaryForCustomer = $this->getSummaryForCustomer();
+        $pointsLabel        = $this->getPointsUnitName();
+        ?>
+            <div class="field-row">
+                <input type="checkbox" name="payment[use_reward_points]" value="1"
+                       id="use_reward_points"<?php echo $this->useRewardPoints() ? ' checked="checked"' : '' ?>
+                       class="checkbox"/>
+                <label for="use_reward_points">
+                    <?php echo Mage::helper('enterprise_reward')->__('Use my reward points, %s available', Mage::helper('enterprise_reward')->formatReward($this->getSummaryForCustomer(), $this->getMoneyForPoints())); ?>
+                </label>
+            </div>
+            <script type="text/javascript">
+                var giantOSCEnterpriseReward = new MagegiantOneStepCheckoutEnterpriseReward({
+                    containerSelector: '#one-step-checkout-review-enterprise-points',
+                    msgContainerSelector: '.enterprise-points-message-container',
+                    cancelRewardElSelector: 'tr th a',
+                    usePointsCheckbox: "use_reward_points",
+                    applyPointsUrl: '<?php echo $this->getApplyPointsAjaxUrl();?>',
+                    actionPattern: <?php echo $this->getActionEEPattern()?>,
+                    successMessageBoxCssClass: 'one-step-checkout-success-msg',
+                    errorMessageBoxCssClass: 'one-step-checkout-error-msg',
+                    jsErrorMsg: "<?php echo $this->__("Can not apply points"); ?>",
+                    jsSuccessMsg: "<?php echo $this->__("Ok"); ?>"
+                });
+            </script>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
